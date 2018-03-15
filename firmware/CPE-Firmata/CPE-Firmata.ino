@@ -1455,6 +1455,7 @@ void setup()
 void loop()
 {
   byte pin, analogPin;
+  analogReadResolution(12);
 
   /* DIGITALREAD - as fast as possible, check for changes and output them to the
    * FTDI buffer using Serial.print()  */

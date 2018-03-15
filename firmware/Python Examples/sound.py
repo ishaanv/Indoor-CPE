@@ -18,7 +18,7 @@ board = CircuitPlayground(port)
 # Define function that will be called when data is received from the microphone.
 def sound_data(data):
     # Print out the raw microphone ADC value (data[2] holds the value).
-    print('Microphone: {0}'.format(data[2]))
+    print('Microphone: {} '.format(data[2]))
 
 # Setup Firmata to listen to the microphone analog input (A4):
 # The callback functions will be called whenever new data is available.
