@@ -1,8 +1,11 @@
 #!/usr/bin/python
 import time
 import sys
-import multiprocessing
+
+import threading
 import math
+import signal
+
 from queue import Queue
 # Import CircuitPlayground class from the circuitplayground.py in the same directory.
 from circuitplayground_edit import CircuitPlayground
@@ -138,9 +141,22 @@ def neopixel_simple():
     board.show_pixels()
 
 
-# thread = Thread(target=neopixel_thread, args=(10, ))
+# thread = threading.Thread(target=neopixel_thread, args=(10, ))
+# t.daemon = True # die when the main thread dies
+# t.start()
+# q = Queue()
+
 # thread.start()
 # thread.join()
+
+
+def signal_handler(sig, frm):
+    print('You pressed Ctrl+C!!!!')
+    if firmata is not None:
+        firmata.reset()
+    sys.exit(0)
+
+signal.signal(signal.SIGINT, signal_handler)
 
 while (True):
     neopixel_simple()
