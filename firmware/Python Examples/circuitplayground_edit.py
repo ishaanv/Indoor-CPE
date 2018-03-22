@@ -119,13 +119,13 @@ class CircuitPlayground(PyMata):
         self._cap_callback = None
         self._sensecolor_callback = None
 
+
     def _therm_value_to_temp(self, adc_value):
         """Convert a thermistor ADC value to a temperature in Celsius."""
         # Use Steinhart-Hart thermistor equation to convert thermistor resistance to
         # temperature.  See: https://learn.adafruit.com/thermistor/overview
         # Handle a zero value which has no meaning (and would cause a divide by zero).
         # adc_value = int(adc_value)
-        print(adc_value)
         if adc_value == 0:
             return float('NaN')
         # First calculate the resistance of the thermistor based on its ADC value.

@@ -7,10 +7,11 @@ from circuitplayground import CircuitPlayground
 
 
 # Grab the serial port from the command line parameters.
-if len(sys.argv) != 2:
-    print('ERROR! Must specify the serial port as command line parameter.')
-    sys.exit(-1)
-port = sys.argv[1]
+# if len(sys.argv) != 2:
+#     print('ERROR! Must specify the serial port as command line parameter.')
+#     sys.exit(-1)
+# port = sys.argv[1]
+port = "COM7"
 
 # Connect to Circuit Playground board on specified port.
 board = CircuitPlayground(port)

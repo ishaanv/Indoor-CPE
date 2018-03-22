@@ -89,4 +89,4 @@ while True:
     # the pixels).
     board.show_pixels()
     # Sleep for a bit between iterations.
-    time.sleep(0.01)
+    time.sleep(0.1)

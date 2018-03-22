@@ -22,6 +22,7 @@ intensity of a second LED. When the potentiometer exceeds a raw value of
 import time
 import signal
 import sys
+import os
 
 # from PyMata.pymata import PyMata
 from circuitplayground_edit import CircuitPlayground
@@ -51,20 +52,21 @@ LATCH_TIME_STAMP = 3
 # Callback functions
 # Set the LED to current state of the pushbutton switch
 def cb_push_button(data):
-    board.digital_write(GREEN_LED, data[DATA_VALUE])
+    os.kill(os.getpid(), signal.SIGSEGV)
+
 
 
 
 # Create a PyMata instance
 # board = PyMata("COM6", verbose=True)
-board = CircuitPlayground("COM6")
+board = CircuitPlayground("COM7")
 
 
-# def signal_handler(sig, frame):
-#     print('You pressed Ctrl+C')
-#     if board is not None:
-#         board.reset()
-#     sys.exit(0)
+def signal_handler(sig, frame):
+    print('You pressed Ctrl+C')
+    if board is not None:
+        board.reset()
+    sys.exit(0)
 
 board.set_pixel_brightness(50)
 def signal_pixel(sig, frame):
@@ -80,7 +82,8 @@ def signal_pixel(sig, frame):
         board.show_pixels()
         # board.reset()
 
-signal.signal(signal.SIGUSR2, signal_pixel)
+
+signal.signal(signal.SIGSEGV, signal_pixel)
 # signal.signal(signal.SIGINT, signal_handler)
 
 

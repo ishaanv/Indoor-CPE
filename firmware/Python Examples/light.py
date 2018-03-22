@@ -11,7 +11,7 @@ from circuitplayground import CircuitPlayground
 #     print('ERROR! Must specify the serial port as command line parameter.')
 #     sys.exit(-1)
 # port = sys.argv[1]
-port = "COM6"
+port = "COM7"
 
 # Connect to Circuit Playground board on specified port.
 board = CircuitPlayground(port)
@@ -20,9 +20,7 @@ board = CircuitPlayground(port)
 def light_data(data):
     # Print out the raw light sensor ADC value (data[2] holds the value).
     print('Light sensor: {0}'.format(data[2]))
-    print('Hello')
-    time.sleep(0.1)
-    print('World')
+    
 
 # Setup Firmata to listen to light sensor analog input (A5).
 # The callback function will be called whenever new data is available.
