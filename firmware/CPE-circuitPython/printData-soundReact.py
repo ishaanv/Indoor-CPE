@@ -1,16 +1,3 @@
-"""
-
-
-can be done as a usb HID device:
-http://circuitpython.readthedocs.io/en/2.x/shared-bindings/usb_hid/Device.html
-
-sys.stdin.read(1)
-
-using boot_out.txt or other file as buffer for reading and writing
-"""
-
-
-
 import array
 import audiobusio
 import board
@@ -93,7 +80,8 @@ last2 = last
 last3 = last
 magnitude = input_floor
 while True:
-    last = sys.stdin.read(1)
+    # last = sys.stdin.readline()
+    # print(last)
     # print("last:{}".foramt(last))
     if last == 'd':
         print("HELLO")
@@ -127,7 +115,7 @@ while True:
     if abs(last2 - now) > interval_sound:
         mic.record(samples, len(samples))
         magnitude = normalized_rms(samples)
-        print(magnitude)
+        print("sound: {}".format(magnitude))
         last2 = now
 
 
