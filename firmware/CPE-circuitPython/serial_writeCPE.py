@@ -13,5 +13,5 @@ from analogio import AnalogIn
 
 
 while True:
-    x = sys.stdin.read(1)
-    print(x)
+	x = sys.stdin.readline()
+	print(x)
