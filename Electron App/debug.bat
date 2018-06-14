@@ -1,1 +1,1 @@
-electron --inspect=5858 .
+electron --inspect=9222 .
