@@ -1,4 +1,6 @@
 const {app, BrowserWindow, Menu, Tray} = require('electron');
+const nativeImage = require('electron').nativeImage;
+const path = require('path');
 const url = require('url');
 
 let win = null
@@ -26,7 +28,9 @@ if (shouldQuit) {
 }
 
 function boot() {
-    tray = new Tray('icon.png')
+    const iconPath = path.join(__dirname, 'icon.png');
+    const trayIcon = nativeImage.createFromPath(iconPath);
+    tray = new Tray(trayIcon);
     console.log("I'm tryna boot")
     win = new BrowserWindow({
         width: 600,
