@@ -28,6 +28,7 @@ if (shouldQuit) {
 }
 
 function boot() {
+    global.hideNotClose = true;
     const iconPath = path.join(__dirname, 'icon.png');
     const trayIcon = nativeImage.createFromPath(iconPath);
     tray = new Tray(trayIcon);
@@ -50,7 +51,12 @@ function boot() {
     tray.setContextMenu(contextMenu)
     win.loadURL(`file://${__dirname}/index.html`)
     win.on('close', (e) => {
-        win = null;
+        if (global.hideNotClose) {
+            e.preventDefault()
+            win.hide();
+        } else {
+            win = null;
+        }
     })
 }
 
