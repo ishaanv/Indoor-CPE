@@ -16,7 +16,8 @@ while True:
     # send = input("input:")
     # x = ser.readline()
     # ser.write((str(i)+'\r\n').encode())
-    ser.write(b'd')
+    print(ser.readline())
+
     i += 1
-    time.sleep(1)
+    # time.sleep(1)
     # print(ser.readable())import time
