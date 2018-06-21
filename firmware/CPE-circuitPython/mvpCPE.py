@@ -4,44 +4,89 @@ import board
 import math
 import neopixel
 import time
-import sys
-import microcontroller
-import digitalio
 
 import adafruit_thermistor
 from analogio import AnalogIn
 
-import storage
 import os
 import supervisor
-# from adafruit_circuitplayground.express import cpx
-
-supervisor.disable_autoreload()
 
 import constants as c
 
+supervisor.disable_autoreload()
+
+"""
+initialise RGB colour list
+"""
 colour = [0, 0, 0]
 
+"""
+initialise scheduling variables
+"""
 last = time.monotonic()
 light_last = last
 temp_last = last
 sound_last = last
 neopixel_last = last
 
+"""
+initialise neopixels
+brightness is a value from 0-1
+auto_write = True means the pixels
+	value change without show,
+	but is extremely slow
+"""
 pixels = neopixel.NeoPixel(board.NEOPIXEL, c.NUM_PIXELS,
                            brightness=1, auto_write=False)
+
+"""
+initialise thermistor
+"""
 thermistor = adafruit_thermistor.Thermistor(
-    board.TEMPERATURE, c.RMEASURED, c.NOMINALRESISTOR, c.NOMINALTEMPERATURE, c.BETACOEF)
+    board.TEMPERATURE,
+	c.RMEASURED,
+	c.NOMINALRESISTOR,
+	c.NOMINALTEMPERATURE,
+	c.BETACOEF)
+
+"""
+initialise light ADC
+"""
 light = AnalogIn(board.LIGHT)
 
-# Remove DC bias before computing RMS.
-def normalized_rms(values):
-    minbuf = int(mean(values))
-    return math.sqrt(sum(float((sample-minbuf)*(sample-minbuf)) for sample in values)/len(values))
+"""
+initialise sound measurements
+"""
+mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK,
+                       board.MICROPHONE_DATA,
+					   sample_rate=44100,
+					   bit_depth=16
+					   )
+# Record an initial sample to calibrate. Assume it's quiet when we start.
+samples = array.array('H', [0] * c.NUM_SAMPLES)
+mic.record(samples, len(samples))
+# Set lowest level to expect, plus a little.
+# input_floor = normalized_rms(samples) + 10
+
 
 def mean(values):
-    return (sum(values) / len(values))
-mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, sample_rate=44100, bit_depth=16)
+    return sum(values) / len(values)
+
+
+def normalized_rms(values):
+	"""
+
+	TODO: check whether len(values) includes zeroes
+	i.e. empy buffer (samples) values are zero?
+	"""
+	# Remove DC bias before computing RMS.
+	dc_bias = int(mean(values))
+	sum_squares = sum(
+		float((sample-dc_bias)**2) 
+		for sample in values)
+	return math.sqrt(sum_squares / len(values))
+
+
 
 def serial(text):
 	"""
@@ -54,13 +99,19 @@ def serial(text):
 
 
 def analog_serial(value, sample_rate, now, last):
+	"""
+
+	"""
 	if now - last > sample_rate:
 		serial(value)
 		last = now
 		
-	return last	
+	return last
 
 def sound_serial(mic, samples, sample_rate, now, last):
+	"""
+
+	"""
 	if now - last > sample_rate:
 		mic.record(samples, len(samples))
 		magnitude = normalized_rms(samples)
@@ -70,13 +121,16 @@ def sound_serial(mic, samples, sample_rate, now, last):
 
 
 def neopixel_control(fsize, buffer_name, sample_rate, now, last):
+	"""
+
+	"""
 	if now - last > sample_rate:
 		last = now
 		if fsize > 0:
 			with open(buffer_name, 'r') as fr:
 				lines = fr.readlines()
 				if len(lines) > 0:
-					#READ FIRST LINE FOR NOW
+					# READ FIRST LINE FOR NOW
 					colour[0] = int(lines[0][:2], 16)
 					colour[1] = int(lines[0][2:4], 16)
 					colour[2] = int(lines[0][4:], 16)
@@ -90,22 +144,23 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
 			serial("N{}{}{}".format(N[0], N[1], N[2]))		
 	return last
 
-# Record an initial sample to calibrate. Assume it's quiet when we start.
-samples = array.array('H', [0] * c.NUM_SAMPLES)
-mic.record(samples, len(samples))
-
-# Set lowest level to expect, plus a little.
-input_floor = normalized_rms(samples) + 10
-
 
 while True:
+	# get the current time
 	now = time.monotonic()
-	fsize = os.stat(c.BUFFERNAME)[6]
-
+	
+	# Serial print the value of the sensor value
+	# and update last time if scheduled
+	# last value is passed through if not scheduled
 	light_last = analog_serial(light.value, c.INTERVAL_LIGHT, now, light_last)
 	temp_last = analog_serial(thermistor.temperature,
 	                          c.INTERVAL_TEMPERATURE, now, temp_last)
 	sound_last = sound_serial(mic, samples, c.INTERVAL_SOUND, now, sound_last)
+
+	# read the byte size of the file from the stat tuple
+	fsize = os.stat(c.BUFFERNAME)[6]
+
+	# update neopixel colour value if BUFFERNAME is not empty
+	# serial prints new value until value is deleted
 	neopixel_last = neopixel_control(
 	    fsize, c.BUFFERNAME, c.INTERVAL_PIXEL, now, neopixel_last)
-
