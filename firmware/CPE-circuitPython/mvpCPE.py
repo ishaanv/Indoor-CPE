@@ -13,32 +13,25 @@ from analogio import AnalogIn
 
 import storage
 import os
-import samd
+import supervisor
 # from adafruit_circuitplayground.express import cpx
 
-samd.disable_autoreload()
+supervisor.disable_autoreload()
 
-NUM_SAMPLES = 50
-NUM_PIXELS = 10
+import constants as c
 
-
-buffername = 'buffer.txt'
 colour = [0, 0, 0]
-j = 0
 
-interval_sound = 0.1
-interval_analog = 1
-interval_pixel = 0.1
 last = time.monotonic()
 light_last = last
 temp_last = last
 sound_last = last
 neopixel_last = last
 
-pixels = neopixel.NeoPixel(board.NEOPIXEL, NUM_PIXELS,
+pixels = neopixel.NeoPixel(board.NEOPIXEL, c.NUM_PIXELS,
                            brightness=1, auto_write=False)
 thermistor = adafruit_thermistor.Thermistor(
-    board.TEMPERATURE, 11371.93, 10000, 25, 3950)
+    board.TEMPERATURE, c.RMEASURED, c.NOMINALRESISTOR, c.NOMINALTEMPERATURE, c.BETACOEF)
 light = AnalogIn(board.LIGHT)
 
 # Remove DC bias before computing RMS.
@@ -48,7 +41,7 @@ def normalized_rms(values):
 
 def mean(values):
     return (sum(values) / len(values))
-mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, frequency=16000, bit_depth=16)
+mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK, board.MICROPHONE_DATA, sample_rate=44100, bit_depth=16)
 
 def serial(text):
 	"""
@@ -88,7 +81,7 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
 					colour[1] = int(lines[0][2:4], 16)
 					colour[2] = int(lines[0][4:], 16)
 
-			for i in range(NUM_PIXELS):
+			for i in range(c.NUM_PIXELS):
 				pixels[i] = colour
 				pixels.show()
 
@@ -98,7 +91,7 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
 	return last
 
 # Record an initial sample to calibrate. Assume it's quiet when we start.
-samples = array.array('H', [0] * NUM_SAMPLES)
+samples = array.array('H', [0] * c.NUM_SAMPLES)
 mic.record(samples, len(samples))
 
 # Set lowest level to expect, plus a little.
@@ -107,11 +100,12 @@ input_floor = normalized_rms(samples) + 10
 
 while True:
 	now = time.monotonic()
-	fsize = os.stat(buffername)[6]
+	fsize = os.stat(c.BUFFERNAME)[6]
 
-	light_last = analog_serial(light.value, interval_analog, now, light_last)
-	temp_last = analog_serial(thermistor.temperature, interval_analog, now, temp_last)
-	sound_last = sound_serial(mic, samples, interval_sound, now, sound_last)
+	light_last = analog_serial(light.value, c.INTERVAL_LIGHT, now, light_last)
+	temp_last = analog_serial(thermistor.temperature,
+	                          c.INTERVAL_TEMPERATURE, now, temp_last)
+	sound_last = sound_serial(mic, samples, c.INTERVAL_SOUND, now, sound_last)
 	neopixel_last = neopixel_control(
-	    fsize, '/buffer.txt', interval_pixel, now, neopixel_last)
-	
+	    fsize, c.BUFFERNAME, c.INTERVAL_PIXEL, now, neopixel_last)
+
