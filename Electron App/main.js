@@ -1,9 +1,14 @@
-const {app, BrowserWindow, Menu, Tray} = require('electron');
+const {app, BrowserWindow, ipcMain, Menu, Tray} = require('electron');
 const nativeImage = require('electron').nativeImage;
 const path = require('path');
 const url = require('url');
 
-let win = null
+//Auto update stuff
+const autoUpdater = require('electron-updater');
+const appVersion = require('./package.json').version;
+const os = require('os').platform();
+
+let win = null;
 
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     if (win) {
@@ -39,6 +44,8 @@ function boot() {
         frame: false
     })
 
+    autoUpdater.checkForUpdates();
+
     //https://github.com/electron/electron/blob/master/docs/api/tray.md
 
     const contextMenu = Menu.buildFromTemplate([
@@ -59,6 +66,13 @@ function boot() {
         }
     })
 }
+
+
+// When the update has been downloaded and is ready to be installed, quit and install it
+autoUpdater.on('update-downloaded', (info) => {
+    autoUpdater.quitAndInstall();
+});
+
 
 app.on('ready', boot)
 
