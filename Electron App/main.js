@@ -4,7 +4,7 @@ const path = require('path');
 const url = require('url');
 
 //Auto update stuff
-const autoUpdater = require('electron-updater');
+const {autoUpdater} = require('electron-updater');
 const appVersion = require('./package.json').version;
 const os = require('os').platform();
 
@@ -70,6 +70,7 @@ function boot() {
 
 // When the update has been downloaded and is ready to be installed, quit and install it
 autoUpdater.on('update-downloaded', (info) => {
+    alert("Quitting and installing the updated version of the app")
     autoUpdater.quitAndInstall();
 });
 

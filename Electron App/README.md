@@ -20,4 +20,3 @@ https://www.electron.build/code-signing
 Auto updating
 Official https://www.electron.build/auto-update
 Use this one! https://medium.freecodecamp.org/quick-painless-automatic-updates-in-electron-d993d5408b3a
-
