@@ -25,7 +25,9 @@
   "homepage": "https://github.com/bvn-architecture/Indoor-CPE#readme",
   "devDependencies": {
     "electron-builder": "^20.16.0",
-    "electron-packager": "^12.1.0"
+    "electron-packager": "^12.1.0",
+    "eslint": "^5.0.1",
+    "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
     "electron-updater": "^2.21.10"
