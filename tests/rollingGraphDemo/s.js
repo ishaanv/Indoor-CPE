@@ -85,7 +85,7 @@ var windowLength = 30*1000;
 
 var layout = {
   title: `A rolling ${windowLength/1000} seconds of data`,
-  width: 1200, 
+  // width: 1200, 
   plot_bgcolor: 'hsl(200, 18%, 80%)',
   paper_bgcolor: 'hsl(200, 18%, 20%)',
   font: {color: 'hsla(250, 5%, 85%, 1)'},
