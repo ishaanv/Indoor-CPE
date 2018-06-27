@@ -65,7 +65,7 @@ while True:
     magnitude = normalized_rms(samples)
     # You might want to print this to see the values.
     # print(magnitude)
- 
+    
     # Compute scaled logarithmic reading in the range 0 to NUM_PIXELS
     c = log_scale(constrain(magnitude, input_floor, input_ceiling), input_floor, input_ceiling, 0, NUM_PIXELS)
  
