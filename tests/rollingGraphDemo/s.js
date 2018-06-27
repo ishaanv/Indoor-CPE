@@ -20,8 +20,9 @@ function getTime(dataPair) {
   return dataPair['time'];
 }
 
+var lastVal = 0;
 function randomData(dataPair) {
-  return Math.random()*8000;
+  return lastVal + (Math.random()-0.5);
 }
 
 function getData(thisManyMiliseconds){
@@ -30,22 +31,24 @@ function getData(thisManyMiliseconds){
   let t = { x: filtered.temperature.map(getTime),
             y: filtered.temperature.map(getValue),
             name: 'Temperature',
+            // yaxis: 'y1'
             type: 'scatter',
-            // axis: 'y1'
           };
   let s = { x: filtered.soundVolume.map(getTime),
             y: filtered.soundVolume.map(getValue),
-            name: 'Volume',
-            axis: 'y2',
+            name: 'Sound Volume',
+            yaxis: 'y2',
             type: 'scatter',
           };
   let l = { x: filtered.soundVolume.map(getTime),
             y: filtered.soundVolume.map(randomData),
             name: 'Light stuff',
-            axis: 'y3',
+            yaxis: 'y3',
             type: 'scatter',
           };
   let d = [t, s, l];
+
+  console.log(d);
   return d;
 }
 
@@ -102,7 +105,7 @@ var layout = {
     position: 0
   }, 
   yaxis3: {
-    title: 'light stuff', 
+    title: 'Light stuff', 
     titlefont: {color: 'rgb(44, 160, 44)'}, 
     tickfont:  {color: 'rgb(44, 160, 44)'}, 
     anchor: 'x', 
