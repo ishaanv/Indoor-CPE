@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "install-app-deps",
-    "start": "npm install && electron ./app",
+    "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
     "build": "build --win",
@@ -30,7 +30,8 @@
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
-    "electron-updater": "^2.21.10"
+    "electron-updater": "^2.21.10",
+    "npm": "^6.1.0"
   },
   "build": {
     "win": {
