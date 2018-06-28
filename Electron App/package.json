@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "install-app-deps",
-    "start": "npm install && electron ./app",
+    "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
     "build": "build --win",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bvn-architecture/Indoor-CPE.git"
+    "url": "git+https://github.com/bvn-architecture/Hyperion"
   },
   "author": "Baptiste",
   "license": "ISC",
@@ -30,8 +30,8 @@
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
-    "ajv": "^6.5.1",
-    "electron-updater": "^2.21.10"
+    "electron-updater": "^2.21.10",
+    "npm": "^6.1.0"
   },
   "build": {
     "win": {

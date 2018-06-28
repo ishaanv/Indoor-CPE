@@ -41,7 +41,7 @@ function boot() {
     win = new BrowserWindow({
         width: 600,
         height: 400,
-        frame: false
+        frame: true
     })
 
     autoUpdater.checkForUpdates();
