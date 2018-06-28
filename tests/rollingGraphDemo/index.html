@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Default Page Title</title>
+  <!-- <link rel="shortcut icon" href="favicon.ico">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script> -->
+  
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <style>
+  @import url("https://fonts.googleapis.com/css?family=Merriweather:400,400i,700");
+  .explanation {
+    column-width: 25em;
+    font-family: Merriweather, serif;
+    line-height: 1.6;
+    padding: 2em;
+    width: 60em;
+  }
+  body {
+    background-color: hsl(200, 18%, 20%);
+    color: hsla(250, 5%, 85%, 1);
+  }
+  </style>
+
+<!--[if lt IE 9]>
+  <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+</head>
+
+<body>
+
+    <div id="graph"></div>
+    <div class="explanation">
+      <p>This is a plotly graph that looks at a lot of data, and only takes 30 seconds worth of it. performance wise it's a monster, but that only really shows up on shim data, and hopefully won't be an issue with a rolling buffer.</p>
+      <h3>TODO:</h3>
+      <ul>
+      <li>The left side doesn't hide the bit where the data disapears, so it's a bit odd that there's a gap.</li>
+      <li>The ticks auto fill, I think I'd like subticks that are at 1s intervals. (or grid lines)</li>
+      <li>There's only one axis, probably should <a href="https://plot.ly/javascript/multiple-axes/#multiple-yaxes">have 3</a></li>
+      </ul>
+      <p>Thoughts?</p>
+      </div>
+
+    <script src="s.js"></script>
+
+</body>
+</html>
