@@ -64,8 +64,9 @@ function boot() {
         } else {
             win = null;
         }
-    })
-    console.log("AT THE END OF BOOT!!!!!")
+    });
+    console.log("AT THE END OF BOOT!!!!!");
+    cerial();
 }
 
 
@@ -81,3 +82,83 @@ app.on('ready', boot)
 
 //Catching closing events
 //https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
+
+
+function cerial(){
+    const SerialPort = require('serialport');
+    var schedule = require('node-schedule');
+
+    let startTime = new Date(Date.now()+ 3000)
+
+    var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
+        fakeLog(new Date(Date.now()).toString());
+    });
+
+    const parsers = SerialPort.parsers;
+    const timeToKeepMS = 1*1000; //in milliseconds
+
+    var ringBuffer = [];    
+
+    // Use a `\r\n` as a line terminator
+    const parser = new parsers.Readline({
+        delimiter: '\r\n'
+    });
+
+    const port = new SerialPort('COM12', {
+        baudRate: 115200
+    });
+
+    function decodeData(d) {
+        // console.log("1", d)
+        d = d.split(': ');
+        // console.log("2", d[0])
+        var sensorType = d[0];
+        var value = d[1];
+        return {
+            sensorType: sensorType,
+            value: value,
+            timeStamp: Date.now(),
+        };
+    }
+
+    // external counter
+    var counter = 0
+
+    function appendToRing(newData) {
+        ringBuffer.push(newData);
+        var timeNow = newData.timeStamp;
+        var cutoffTime = timeNow - timeToKeepMS;
+        var x = ringBuffer.filter(d => d.timeStamp > cutoffTime);
+        ringBuffer = x; // WILL SOMEONE PLEASE EXPLAIN THIS TO ME?
+        // This is O(n), that's probably fine for small arrays. If perf
+        // becomes an issue then we could loop from the tail and break
+        // once we reach a value that we should keep.
+        counter++;
+        if (counter%10 == 0){
+            fakeLog(["<br /><br /><br />", timeNow, ringBuffer]);
+        }
+    }
+
+    function saveData(data){
+        var d = decodeData(data);
+        appendToRing(d);
+    }
+
+    function fakeLog(text){
+        if(text.isArray()){
+            text = text.join("    ");
+        }
+        var electronText = document.querySelector("#text");
+        electronText.innerHTML += 'Extra stuff';
+    }
+
+    port.pipe(parser);
+
+    port.on('open', () => console.log('Port open'));
+
+    parser.on('data', saveData);
+
+    // port.write('ROBOT PLEASE RESPOND\n');
+
+    // The parser will emit any string response
+}
