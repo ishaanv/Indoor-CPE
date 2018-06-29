@@ -4,10 +4,18 @@
 // Use a Readline parser
 
 const SerialPort = require('serialport');
+var schedule = require('node-schedule');
+
+let startTime = new Date(Date.now()+ 3000)
+
+var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
+    console.log(new Date(Date.now()).toString());
+});
+
 const parsers = SerialPort.parsers;
 const timeToKeepMS = 1*1000; //in milliseconds
 
-var ringBuffer = [];
+var ringBuffer = [];    
 
 // Use a `\r\n` as a line terminator
 const parser = new parsers.Readline({
@@ -45,7 +53,7 @@ function appendToRing(newData) {
     // once we reach a value that we should keep.
     counter++;
     if (counter%10 == 0){
-        console.log("\n\n\n", timeNow, ringBuffer.length);
+        // console.log("\n\n\n", timeNow, ringBuffer.length);
     }
 
 
@@ -65,3 +73,7 @@ parser.on('data', saveData);
 port.write('ROBOT PLEASE RESPOND\n');
 
 // The parser will emit any string response
+
+
+// BEN STUFF
+

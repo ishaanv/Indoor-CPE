@@ -65,6 +65,7 @@ function boot() {
             win = null;
         }
     })
+    console.log("AT THE END OF BOOT!!!!!")
 }
 
 

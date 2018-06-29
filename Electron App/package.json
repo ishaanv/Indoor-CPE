@@ -30,6 +30,7 @@
     "eslint-config-google": "^0.9.1"
   },
   "dependencies": {
+    "buffer-from": "^1.1.0",
     "electron-updater": "^2.21.10",
     "npm": "^6.1.0"
   },

@@ -9,6 +9,4 @@ serialport.list(function (err, ports) {
         console.log(port.manufacturer);
     })
 
-
-
 })

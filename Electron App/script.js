@@ -36,3 +36,5 @@ function maximiseWindow() {
         window.maximize();
     };
 }
+
+console.log("I AM IN SCRIPT!!!")
