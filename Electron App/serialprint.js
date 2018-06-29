@@ -45,7 +45,7 @@ function appendToRing(newData) {
     // once we reach a value that we should keep.
     counter++;
     if (counter%10 == 0){
-        console.log("\n\n\n", timeNow, ringBuffer);
+        console.log("\n\n\n", timeNow, ringBuffer.length);
     }
 
 
