@@ -1,0 +1,52 @@
+VID: 239A PID: 8019
+
+VID: 239A PID: 0018
+VID: 239A PID: 8018
+VID: 239A PID: 8018
+using latest I get new PID 8019 for previous 8018
+
+0: 
+-----------
+VID:239A
+PID:8019
+Other: 300890CF&0&0000
+UID: '\u2989\u34cd\u5741\u504d\u3120\u372e\u1020\uff13'
+
+1: 
+-----------
+VID:239A
+PID:8019
+Other: 5671ACD&0&0000
+UID: '\u90b1\uc089\u5741\u504d\u3120\u372e\u0120\uff13'
+
+
+
+2a: 
+-----------
+VID:239A
+PID:8019
+Other: 1CFB48D6&0&0000
+UID: '\u219f\u3889\u5741\u504d\u3120\u372e\u1620\uff13'
+
+
+2b:
+-----------
+VID:239A
+PID:8019
+Other: 27B54109&0&0000
+UID: '\u954d\u82ba\u5257\u504d\u3120\u352e\u1822\uff0d'
+
+3:
+-----------
+VID:239A
+PID:8019
+Other: 336F0CE0&0&0000
+UID: '\u66e6\ua47b\u5741\u504d\u3120\u372e\u1820\uff13'
+
+4:
+-----------
+VID:239A
+PID:8019
+Other: 1C7EDB96&0&0000
+UID: '\ue245\ufacb\u5741\u504d\u3120\u372e\u0f1d\uff13'
+
