@@ -37,7 +37,8 @@
     "electron-prebuilt": "^1.4.13",
     "electron-rebuild": "^1.8.1",
     "electron-updater": "^2.21.10",
-    "npm": "^6.1.0"
+    "npm": "^6.1.0",
+    "serialport": "^6.2.1"
   },
   "build": {
     "win": {
