@@ -6,7 +6,7 @@
   "productName": "oatmeal",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "postinstall": "install-app-deps",
+    "postinstall": "electron-builder install-app-deps",
     "start": "npm install && electron .",
     "pack": "build --dir",
     "dist": "build",
@@ -34,9 +34,11 @@
   "dependencies": {
     "ajv": "^6.5.1",
     "buffer-from": "^1.1.0",
+    "electron-is-dev": "^0.3.0",
     "electron-prebuilt": "^1.4.13",
     "electron-rebuild": "^1.8.1",
     "electron-updater": "^2.21.10",
+    "node-schedule": "^1.3.0",
     "npm": "^6.1.0",
     "serialport": "^6.2.1"
   },
