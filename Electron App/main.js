@@ -43,7 +43,7 @@ function fakeLog(text){
 }
 
 function cerial(){
-    let startTime = new Date(Date.now()+ 3000)
+    let startTime = new Date(Date.now()+ 3000);
 
     var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
         fakeLog(new Date(Date.now()).toString());
