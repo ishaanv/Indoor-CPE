@@ -65,10 +65,10 @@ function cerial(){
     });    
     
 
-    console.log("port is open", port);
+    console.log("\n\nport seems to be open", port);
     port.pipe(parser);
 
-    port.on('open', () => console.log('Port open'));
+    port.on('open', (x) => console.log('\n\nPort open', x));
 
     parser.on('data', saveData);
 
