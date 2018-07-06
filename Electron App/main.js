@@ -22,12 +22,21 @@ function appendToRing(newData) {
     // once we reach a value that we should keep.
     counter++;
     if (counter%10 == 0){
-        fakeLog(["<br /><br /><br />", timeNow, ringBuffer]);
+        fakeLog(["<br /><br /><br />", counter, timeNow, " buffer: ", ringBuffer, "|End of buffer"]);
     }
 }
 
 function saveData(data){
-    console.log("I'm recieving data, but I shouldn't be:", data);
+    console.log("a (saveData) I'm recieving data, I would be appending it to the ring buffer", data);
+    SerialPort.list(function (err, ports) {
+        ports.forEach(function(port) {
+            console.log(port.comName);
+            console.log(port.pnpId);
+            console.log(port.manufacturer);
+        });
+    
+    });
+    console.log("b (saveData) I'm recieving data, I would be appending it to the ring buffer", data);
     //TODO: uncoment these lines, 
     // var d = decodeData(data);
     // appendToRing(d);
@@ -38,43 +47,86 @@ function fakeLog(text){
         
         text = text.join("    ");
     }
-    var electronText = document.querySelector("#text");
-    electronText.innerHTML += 'Extra stuff';
+    console.log("fakeLog:",text);
+    // var electronText = document.querySelector("#text");
+    // electronText.innerHTML += 'Extra stuff';
 }
 
-function cerial(){
-    let startTime = new Date(Date.now()+ 3000);
+function dateStamp() {
+    return new Date(Date.now()).toString();
+}
 
-    var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
-        fakeLog(new Date(Date.now()).toString());
+
+// {"comName":     "COM3",
+//  "manufacturer":"Microsoft",
+//  "serialNumber":"9892DC431475D4050213E273020131FF",
+//  "pnpId":       "USB\\VID_239A&PID_8019&MI_00\\6&300890CF&0&0000",
+//  "locationId":  "0000.0014.0000.003.000.000.000.000.000",
+//  "vendorId":    "239A",
+//  "productId":   "8019"}
+function isCPE(port) {
+    return (port.vendorId === "239A") && (port.productId === "8019");
+}
+
+function searchForCPE() {
+    return new Promise((resolve, reject)=>{
+        SerialPort.list(function (err, ports) {
+            console.log("ports:", ports);
+            ports.forEach(function (port) {
+                console.log("p:", port.comName);
+                if (isCPE(port)) {
+                    resolve(port);
+                }
+            });
+        });
     });
+}
 
-    const parsers = SerialPort.parsers;
-    const timeToKeepMS = 1*1000; //in milliseconds
+function getPortInfo() {
+    return new Promise((resolve, reject)=>{
+        let thisPort = searchForCPE().then(thisPort => {
+            console.log("thisPort:", thisPort);
+            if(thisPort == undefined){
+                reject("can't find a CPE is it plugged in?");
+            } else {
+                console.log("resolve:", thisPort);
+                resolve(thisPort);            
+            }
+        });
+    });
+}
 
-    var ringBuffer = [];    
-
+function handleSensor(portDetails) {
+    console.log("can you handle this?")
+    //****Open the port*****/
+    const parsers = SerialPort.parsers;    
     // Use a `\r\n` as a line terminator
-    const parser = new parsers.Readline({
-        delimiter: '\r\n'
-    });
+    const parser = new parsers.Readline({ delimiter: '\r\n' });
 
-    
-    const port = new SerialPort('COM12', {
-        baudRate: 115200
-    });    
-    
+    const port = new SerialPort(portDetails.comName, { baudRate: 115200 });
 
-    console.log("\n\nport seems to be open", port);
+    console.log("\n\nport seems to be open. With data:", port);
     port.pipe(parser);
 
     port.on('open', (x) => console.log('\n\nPort open', x));
 
     parser.on('data', saveData);
 
-    // port.write('ROBOT PLEASE RESPOND\n');
+    //****Draw the graph*****/
+    const timeToKeepMS = 1*1000; //in milliseconds
+    var ringBuffer = [];  
+    let startTime = new Date(Date.now() + 3000);
+    var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
+        //TODO: hook this up so that it draws the graph
+        fakeLog(dateStamp(), "//call to graph drawing");
+    });
+}
 
-    
+function cerial() {
+    getPortInfo()
+        .then( portDetails => handleSensor(portDetails))   
+        .error(error => console.log(error));
+    // port.write('ROBOT PLEASE RESPOND\n');
     // The parser will emit any string response
 }
 
@@ -85,10 +137,10 @@ function boot() {
     tray = new Tray(trayIcon);
     console.log("I'm tryna boot")
     win = new BrowserWindow({
-        width: 600,
+        width:  600,
         height: 400,
-        frame: true,
-        show: false
+        frame:  true,
+        show:   false
     });
 
 
@@ -106,9 +158,16 @@ function boot() {
         {label: "Can be interrupted", type: 'radio', checked: true},
         {label: 'Off', type: 'radio'}
     ])
-    tray.setToolTip('Oatmeal')
-    tray.setContextMenu(contextMenu)
-    win.loadURL(`file://${__dirname}/index.html`)
+    tray.setToolTip('Oatmeal');
+    tray.setContextMenu(contextMenu);
+
+    win.loadURL(`file://${__dirname}/index.html`);
+    win.webContents.on('did-finish-load', ()=>{
+        let code = `var t = document.getElementById("text");
+                    t.innerHTML = "goat meal!"`;
+        win.webContents.executeJavaScript(code);
+    });
+
     win.on('close', (e) => {
         if (global.hideNotClose) {
             e.preventDefault()
@@ -143,9 +202,9 @@ const SerialPort = require('serialport');
 const schedule = require('node-schedule');
 
 if (isDev) {
-	console.log('Running in development');
+	console.log('isDev?:', 'Running in development');
 } else {
-	console.log('Running in production');
+	console.log('isDev?:', 'Running in production');
 }
 
 let win = null;
@@ -153,12 +212,12 @@ let win = null;
 var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     if (win) {
         // Bringing the window back to the forefront if someone tries to restart the app
-        console.log(win)
+        console.log(win);
         if (win.isVisible()==false) win.show();
         if (win.isMinimized()) win.restore();
         win.focus();
     } else {
-        console.log("tryna bring it back")
+        console.log("tryna bring it back (shouldQuit)")
         win = new BrowserWindow({
             width: 600,
             height: 400,
