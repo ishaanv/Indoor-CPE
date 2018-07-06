@@ -27,24 +27,14 @@ function appendToRing(newData) {
 }
 
 function saveData(data){
-    console.log("a (saveData) I'm recieving data, I would be appending it to the ring buffer", data);
-    SerialPort.list(function (err, ports) {
-        ports.forEach(function(port) {
-            console.log(port.comName);
-            console.log(port.pnpId);
-            console.log(port.manufacturer);
-        });
-    
-    });
-    console.log("b (saveData) I'm recieving data, I would be appending it to the ring buffer", data);
     //TODO: uncoment these lines, 
-    // var d = decodeData(data);
+    var d = decodeData(data);
+    console.log("(saveData) printing:\n", data, d);
     // appendToRing(d);
 }
 
 function fakeLog(text){
     if(Array.isArray(text)){ //// if(text.isArray()){
-        
         text = text.join("    ");
     }
     console.log("fakeLog:",text);
@@ -71,9 +61,7 @@ function isCPE(port) {
 function searchForCPE() {
     return new Promise((resolve, reject)=>{
         SerialPort.list(function (err, ports) {
-            console.log("ports:", ports);
             ports.forEach(function (port) {
-                console.log("p:", port.comName);
                 if (isCPE(port)) {
                     resolve(port);
                 }
@@ -85,11 +73,9 @@ function searchForCPE() {
 function getPortInfo() {
     return new Promise((resolve, reject)=>{
         let thisPort = searchForCPE().then(thisPort => {
-            console.log("thisPort:", thisPort);
             if(thisPort == undefined){
                 reject("can't find a CPE is it plugged in?");
             } else {
-                console.log("resolve:", thisPort);
                 resolve(thisPort);            
             }
         });
@@ -97,7 +83,6 @@ function getPortInfo() {
 }
 
 function handleSensor(portDetails) {
-    console.log("can you handle this?")
     //****Open the port*****/
     const parsers = SerialPort.parsers;    
     // Use a `\r\n` as a line terminator
@@ -105,21 +90,21 @@ function handleSensor(portDetails) {
 
     const port = new SerialPort(portDetails.comName, { baudRate: 115200 });
 
-    console.log("\n\nport seems to be open. With data:", port);
+    // console.log("\n\nport seems to be open. With data:", port);
     port.pipe(parser);
 
     port.on('open', (x) => console.log('\n\nPort open', x));
 
     parser.on('data', saveData);
 
-    //****Draw the graph*****/
-    const timeToKeepMS = 1*1000; //in milliseconds
-    var ringBuffer = [];  
-    let startTime = new Date(Date.now() + 3000);
-    var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
-        //TODO: hook this up so that it draws the graph
-        fakeLog(dateStamp(), "//call to graph drawing");
-    });
+    // //****Draw the graph*****/
+    // const timeToKeepMS = 1*1000; //in milliseconds
+    // var ringBuffer = [];  
+    // let startTime = new Date(Date.now() + 3000);
+    // var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
+    //     //TODO: hook this up so that it draws the graph
+    //     fakeLog(dateStamp(), "//call to graph drawing");
+    // });
 }
 
 function cerial() {
