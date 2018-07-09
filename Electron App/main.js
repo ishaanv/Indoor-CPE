@@ -97,14 +97,18 @@ function handleSensor(portDetails) {
 
     parser.on('data', saveData);
 
-    // //****Draw the graph*****/
-    // const timeToKeepMS = 1*1000; //in milliseconds
-    // var ringBuffer = [];  
-    // let startTime = new Date(Date.now() + 3000);
-    // var j = schedule.scheduleJob({start: startTime, rule: '*/1 * * * * *'}, function(){
-    //     //TODO: hook this up so that it draws the graph
-    //     fakeLog(dateStamp(), "//call to graph drawing");
-    // });
+    //****Draw the graph*****/
+    drawGraph();
+}
+
+function drawGraph() {
+    const timeToKeepMS = 1 * 1000; //in milliseconds
+    var ringBuffer = [];
+    let startTime = new Date(Date.now() + 3000);
+    var j = schedule.scheduleJob({ start: startTime, rule: '*/1 * * * * *' }, function () {
+        //TODO: hook this up so that it draws the graph
+        fakeLog(dateStamp(), "//call to graph drawing");
+    });
 }
 
 function cerial() {
