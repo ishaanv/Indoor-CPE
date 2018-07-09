@@ -155,9 +155,9 @@ function boot() {
     //https://electronjs.org/docs/api/tray There's loads of stuff this can do!
     const contextMenu = Menu.buildFromTemplate([
         {label: "Don't interrupt me", type: 'radio'},
-        {label: "If it's important", type: 'radio'},
+        {label: "If it's important",  type: 'radio'},
         {label: "Can be interrupted", type: 'radio', checked: true},
-        {label: 'Off', type: 'radio'}
+        {label: 'Off',                type: 'radio'}
     ])
     tray.setToolTip('Oatmeal');
     tray.setContextMenu(contextMenu);
