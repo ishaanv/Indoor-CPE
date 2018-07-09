@@ -110,7 +110,7 @@ function handleSensor(portDetails) {
 function cerial() {
     getPortInfo()
         .then( portDetails => handleSensor(portDetails))   
-        .error(error => console.log(error));
+        .error(error       => console.log(error));
     // port.write('ROBOT PLEASE RESPOND\n');
     // The parser will emit any string response
 }
