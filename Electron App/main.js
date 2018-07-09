@@ -115,10 +115,18 @@ function handleSensor(portDetails) {
 
 
 function drawGraph() {
+    win.webContents.on('did-finish-load', ()=>{
     let startTime = new Date(Date.now() + 3000);
+
+        Plotly.plot('graph', getData(), graphLayout);
+
     var j = schedule.scheduleJob({ start: startTime, rule: '*/1 * * * * *' }, function () {
+            //  that pattern is once a second
         //TODO: hook this up so that it draws the graph
         fakeLog(dateStamp(), "//call to graph drawing");
+            updateGraph();
+    });
+
     });
 }
 
