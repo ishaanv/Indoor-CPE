@@ -73,7 +73,8 @@ function searchForCPE() {
                 }
             });
         });
-        reject("In 'searchForCPE', didn't find a CPE. Is it plugged in?");
+        // TODO: Below, this rejects non-async, so it rejects before it finds the CPE, which sucks, so I've commented it out, how do we atually resolve?
+        // reject("In 'searchForCPE', didn't find a CPE. Is it plugged in?");
     });
 }
 
