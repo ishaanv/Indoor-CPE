@@ -149,7 +149,8 @@ function boot() {
         frame:  true,
         show:   false
     });
-    win.maximize()
+    win.maximize();
+    win.webContents.openDevTools();
 
 
     //https://electronjs.org/docs/api/tray There's loads of stuff this can do!
