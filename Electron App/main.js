@@ -94,8 +94,8 @@ function getPortInfo() {
 function handleSensor(portDetails) {
     //****Open the port*****/
     const parsers = SerialPort.parsers;    
-    // Use a `\r\n` as a line terminator
-    const parser = new parsers.Readline({ delimiter: '\r\n' });
+    
+    const parser = new parsers.Readline({ delimiter: '\r\n' }); // Use a `\r\n` as a line terminator
 
     const port = new SerialPort(portDetails.comName, { baudRate: 115200 });
 
@@ -187,6 +187,16 @@ function boot() {
     console.log("AT THE END OF BOOT!!!!!");
 }
 
+
+function reportIsDev() {
+    if (isDev) {
+        console.log('isDev?:', 'Running in development');
+    }
+    else {
+        console.log('isDev?:', 'Running in production');
+    }
+}
+
 const {app, BrowserWindow, ipcMain, Menu, Tray} = require('electron');
 const nativeImage = require('electron').nativeImage;
 const path = require('path');
@@ -202,11 +212,7 @@ const isDev = require('electron-is-dev');
 const SerialPort = require('serialport');
 const schedule = require('node-schedule');
 
-if (isDev) {
-	console.log('isDev?:', 'Running in development');
-} else {
-	console.log('isDev?:', 'Running in production');
-}
+reportIsDev();
 
 let win = null;
 
