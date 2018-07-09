@@ -53,13 +53,13 @@ function dateStamp() {
 }
 
 
-// {"comName":     "COM3",
-//  "manufacturer":"Microsoft",
-//  "serialNumber":"9892DC431475D4050213E273020131FF",
-//  "pnpId":       "USB\\VID_239A&PID_8019&MI_00\\6&300890CF&0&0000",
-//  "locationId":  "0000.0014.0000.003.000.000.000.000.000",
-//  "vendorId":    "239A",
-//  "productId":   "8019"}
+/* {"comName":     "COM3",
+    "manufacturer":"Microsoft",
+    "serialNumber":"9892DC431475D4050213E273020131FF",
+    "pnpId":       "USB\\VID_239A&PID_8019&MI_00\\6&300890CF&0&0000",
+    "locationId":  "0000.0014.0000.003.000.000.000.000.000",
+    "vendorId":    "239A",
+    "productId":   "8019"}*/
 function isCPE(port) {
     return (port.vendorId === "239A") && (port.productId === "8019");
 }
