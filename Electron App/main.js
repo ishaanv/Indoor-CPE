@@ -69,9 +69,11 @@ function searchForCPE() {
             ports.forEach(function (port) {
                 if (isCPE(port)) {
                     resolve(port);
+                    return;
                 }
             });
         });
+        reject("In 'searchForCPE', didn't find a CPE. Is it plugged in?");
     });
 }
 
