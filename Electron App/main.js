@@ -215,7 +215,7 @@ const isDev = require('electron-is-dev');
 const SerialPort = require('serialport');
 const schedule = require('node-schedule');
 
-const timeToKeepMS = 30 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
+const timeToKeepMS = 10 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
 var ringBuffer = [];
 var counter = 0;
 
