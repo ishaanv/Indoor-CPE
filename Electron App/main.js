@@ -257,3 +257,97 @@ app.on('ready', boot)
 
 //Catching closing events
 //https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
+
+//Catching closing events
+//https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getValue(dataPair) {
+    return dataPair['value'];
+}
+  
+  
+function getTime(dataPair) {
+    return dataPair['timeStamp'];
+}
+  
+  
+  function getData(){
+    // get data from buffer
+    buffer = ringBuffer;
+
+    let sounds = buffer.filter(x => x.sensorType == "sound"); 
+    let lights = buffer.filter(x => x.sensorType == "light");
+    let temps  = buffer.filter(x => x.sensorType == "temperature");
+    //TODO: this is terse, but not that efficient, is that an issue?
+    
+    let t = { x: temps.map(getTime),
+              y: temps.map(getValue),
+              name: 'Temperature',
+              // yaxis: 'y1'
+              type: 'scatter',
+            };
+    let s = { x: sounds.map(getTime),
+              y: sounds.map(getValue),
+              name: 'Sound Volume',
+              yaxis: 'y2',
+              type: 'scatter',
+            };
+    let l = { x: lights.map(getTime),
+              y: lights.map(getValue),
+              name: 'Light stuff',
+              yaxis: 'y3',
+              type: 'scatter',
+            };
+    let d = [t, s, l];
+  
+    console.log(d);
+    return d;
+  }
+  
+  
+  function updateGraph() {
+      Plotly.react('graph', getData(), graphLayout);
+  }
+  
+  var graphLayout = {
+    title: `A rolling chunk of data`,
+    // width: 1200, 
+    plot_bgcolor: 'hsl(200, 18%, 80%)',
+    paper_bgcolor: 'hsl(200, 18%, 20%)',
+    font: {color: 'hsla(250, 5%, 85%, 1)'},
+    xaxis: {domain: [0.1, 0.99]}, 
+    yaxis: {
+      title: 'Temperature', 
+      titlefont: {color: 'rgb(31, 119, 180)'}, 
+      tickfont: {color: 'rgb(31, 119, 180)'}
+    }, 
+    yaxis2: {
+      title: 'Sound Volume', 
+      titlefont: {color: 'rgb(255, 127, 14)'}, 
+      tickfont:  {color: 'rgb(255, 127, 14)'}, 
+      anchor: 'free', 
+      overlaying: 'y', 
+      side: 'left', 
+      position: 0
+    }, 
+    yaxis3: {
+      title: 'Light stuff', 
+      titlefont: {color: 'rgb(44, 160, 44)'}, 
+      tickfont:  {color: 'rgb(44, 160, 44)'}, 
+      anchor: 'x', 
+      overlaying: 'y', 
+      side: 'right'
+    }
+  };
