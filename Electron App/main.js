@@ -161,6 +161,7 @@ function boot() {
     tray.setToolTip('Oatmeal');
     tray.setContextMenu(contextMenu);
 
+    win.setMenu(null);
     win.loadURL(`file://${__dirname}/index.html`);
     win.webContents.on('did-finish-load', ()=>{
         let code = `var t = document.getElementById("text");
