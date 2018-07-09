@@ -41,6 +41,7 @@ function fakeLog(text){
         text = text.join(", ");
     }
     console.log("fakeLog:", text);
+    let code = `var t = document.getElementById("log");
                     t.innerHTML = "${text}"`;
     win.webContents.executeJavaScript(code);
 }
@@ -164,7 +165,7 @@ function boot() {
     win.setMenu(null);
     win.loadURL(`file://${__dirname}/index.html`);
     win.webContents.on('did-finish-load', ()=>{
-        let code = `var t = document.getElementById("text");
+        let code = `var t = document.getElementById("log");
                     t.innerHTML = "goat meal!"`;
         win.webContents.executeJavaScript(code);
     });
