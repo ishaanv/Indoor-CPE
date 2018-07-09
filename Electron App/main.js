@@ -131,6 +131,12 @@ function cerial() {
 
 
 function boot() {
+    if (isDev) {
+        console.log('is dev, not checking for updates at the moment');
+    } else {
+        autoUpdater.checkForUpdates();
+    }
+
     global.hideNotClose = true;
     const iconPath = path.join(__dirname, 'icon.png');
     const trayIcon = nativeImage.createFromPath(iconPath);
@@ -142,16 +148,10 @@ function boot() {
         frame:  true,
         show:   false
     });
+    win.maximize()
 
 
-    if (isDev) {
-        console.log('is dev, not checking for updates at the moment');
-    } else {
-        autoUpdater.checkForUpdates();
-    }
-
-    //https://github.com/electron/electron/blob/master/docs/api/tray.md
-
+    //https://electronjs.org/docs/api/tray There's loads of stuff this can do!
     const contextMenu = Menu.buildFromTemplate([
         {label: "Don't interrupt me", type: 'radio'},
         {label: "If it's important", type: 'radio'},

@@ -1,4 +1,21 @@
-* {
+@import url("https://fonts.googleapis.com/css?family=Merriweather:400,400i,700");
+  .explanation {
+    column-width: 25em;
+    font-family: Merriweather, serif;
+    line-height: 1.6;
+    padding: 2em;
+    width: 60em;
+  }
+  body {
+    background-color: hsl(200, 18%, 20%);
+    color: hsla(250, 5%, 85%, 1);
+  }
+  .done {
+    text-decoration: line-through;
+  }
+
+
+/* * {
     margin: 0;
     padding: 0;
 }
@@ -48,4 +65,4 @@ header {
 
 .option:hover {
     background: red;
-}
+} */
