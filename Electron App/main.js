@@ -22,7 +22,7 @@ function appendToRing(newData) {
     // becomes an issue then we could loop from the tail and break
     // once we reach a value that we should keep.
     counter++;
-    if (counter%10 == 0){
+    if (counter%80 == 0){
         fakeLog(["<p>", counter, timeNow, " buffer: ", ringBuffer, "|EOB</p>"]);
     }
 }
