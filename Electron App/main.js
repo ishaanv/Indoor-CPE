@@ -116,16 +116,16 @@ function handleSensor(portDetails) {
 
 function drawGraph() {
     win.webContents.on('did-finish-load', ()=>{
-    let startTime = new Date(Date.now() + 3000);
+        let startTime = new Date(Date.now() + 3000);
 
         Plotly.plot('graph', getData(), graphLayout);
 
-    var j = schedule.scheduleJob({ start: startTime, rule: '*/1 * * * * *' }, function () {
+        var j = schedule.scheduleJob({ start: startTime, rule: '*/1 * * * * *' }, function () {
             //  that pattern is once a second
-        //TODO: hook this up so that it draws the graph
-        fakeLog(dateStamp(), "//call to graph drawing");
+            //TODO: hook this up so that it draws the graph
+            fakeLog(dateStamp(), "//call to graph drawing");
             updateGraph();
-    });
+        });
 
     });
 }
@@ -148,20 +148,10 @@ function boot() {
     }
 
     global.hideNotClose = true;
+
     const iconPath = path.join(__dirname, 'icon.png');
     const trayIcon = nativeImage.createFromPath(iconPath);
     tray = new Tray(trayIcon);
-    console.log("I'm tryna boot")
-    win = new BrowserWindow({
-        width:  600,
-        height: 400,
-        frame:  true,
-        show:   false
-    });
-    win.maximize();
-    win.webContents.openDevTools();
-
-
     //https://electronjs.org/docs/api/tray There's loads of stuff this can do!
     const contextMenu = Menu.buildFromTemplate([
         {label: "Don't interrupt me", type: 'radio'},
@@ -171,13 +161,19 @@ function boot() {
     ])
     tray.setToolTip('Oatmeal');
     tray.setContextMenu(contextMenu);
-
+    
+    win = new BrowserWindow({
+        width:  600,
+        height: 400,
+        frame:  true,
+        show:   false
+    });
+    // win.maximize();
+    win.webContents.openDevTools();
     win.setMenu(null);
     win.loadURL(`file://${__dirname}/index.html`);
     win.webContents.on('did-finish-load', ()=>{
-        let code = `var t = document.getElementById("log");
-                    t.innerHTML = "goat meal!"`;
-        win.webContents.executeJavaScript(code);
+        fakeLog("goat meal!");
     });
 
     win.on('close', (e) => {
@@ -195,7 +191,6 @@ function boot() {
         win.show();
         cerial();
       });
-    console.log("AT THE END OF BOOT!!!!!");
 }
 
 
@@ -262,9 +257,6 @@ autoUpdater.on('update-downloaded', (info) => {
 
 app.on('ready', boot)
 
-
-//Catching closing events
-//https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
 
 //Catching closing events
 //https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
