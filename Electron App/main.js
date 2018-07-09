@@ -36,11 +36,11 @@ function saveData(data){
 
 
 function fakeLog(text){
-    if(Array.isArray(text)){ //// if(text.isArray()){
-        text = text.join("    ");
+    if(Array.isArray(text)){
+        text = text.map(x => JSON.stringify(x));
+        text = text.join(", ");
     }
-    console.log("fakeLog:",text);
-    let code = `var t = document.getElementById("text");
+    console.log("fakeLog:", text);
                     t.innerHTML = "${text}"`;
     win.webContents.executeJavaScript(code);
 }
