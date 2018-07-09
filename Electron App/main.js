@@ -40,7 +40,8 @@ function fakeLog(text){
         text = text.map(x => JSON.stringify(x));
         text = text.join(", ");
     }
-    console.log("fakeLog:", text);
+    console.log("log text is", typeof(text));
+    console.log("\n", "fakeLog:", text);
     let code = `var t = document.getElementById("log");
                     t.innerHTML = "${text}"`;
     win.webContents.executeJavaScript(code);
