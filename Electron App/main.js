@@ -23,16 +23,15 @@ function appendToRing(newData) {
     // once we reach a value that we should keep.
     counter++;
     if (counter%10 == 0){
-        fakeLog(["<br /><br /><br />", counter, timeNow, " buffer: ", ringBuffer, "|End of buffer"]);
+        fakeLog(["<p>", counter, timeNow, " buffer: ", ringBuffer, "|EOB</p>"]);
     }
 }
 
 
 function saveData(data){
-    //TODO: uncoment these lines, 
     var d = decodeData(data);
-    console.log("(saveData) printing:\n", data, d);
-    // appendToRing(d);
+    appendToRing(d);
+    // console.log("(saveData) printing:\n", data, d);
 }
 
 
@@ -41,8 +40,9 @@ function fakeLog(text){
         text = text.join("    ");
     }
     console.log("fakeLog:",text);
-    // var electronText = document.querySelector("#text");
-    // electronText.innerHTML += 'Extra stuff';
+    let code = `var t = document.getElementById("text");
+                    t.innerHTML = "${text}"`;
+    win.webContents.executeJavaScript(code);
 }
 
 
@@ -103,7 +103,7 @@ function handleSensor(portDetails) {
     // console.log("\n\nport seems to be open. With data:", port);
     port.pipe(parser);
 
-    port.on('open', (x) => console.log('\n\nPort open', x));
+    port.on('open', (x) => console.log('\n\nPort open', x)); //TODO: get this to resolve the port name, not undefined
 
     parser.on('data', saveData);
 
@@ -113,8 +113,6 @@ function handleSensor(portDetails) {
 
 
 function drawGraph() {
-    const timeToKeepMS = 1 * 1000; //in milliseconds
-    var ringBuffer = [];
     let startTime = new Date(Date.now() + 3000);
     var j = schedule.scheduleJob({ start: startTime, rule: '*/1 * * * * *' }, function () {
         //TODO: hook this up so that it draws the graph
@@ -212,6 +210,10 @@ const isDev = require('electron-is-dev');
 
 const SerialPort = require('serialport');
 const schedule = require('node-schedule');
+
+const timeToKeepMS = 1 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
+var ringBuffer = [];
+var counter = 0;
 
 reportIsDev();
 
