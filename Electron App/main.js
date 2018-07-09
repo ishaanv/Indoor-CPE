@@ -11,6 +11,7 @@ function decodeData(d) {
     };
 }
 
+
 function appendToRing(newData) {
     ringBuffer.push(newData);
     var timeNow = newData.timeStamp;
@@ -26,12 +27,14 @@ function appendToRing(newData) {
     }
 }
 
+
 function saveData(data){
     //TODO: uncoment these lines, 
     var d = decodeData(data);
     console.log("(saveData) printing:\n", data, d);
     // appendToRing(d);
 }
+
 
 function fakeLog(text){
     if(Array.isArray(text)){ //// if(text.isArray()){
@@ -41,6 +44,7 @@ function fakeLog(text){
     // var electronText = document.querySelector("#text");
     // electronText.innerHTML += 'Extra stuff';
 }
+
 
 function dateStamp() {
     return new Date(Date.now()).toString();
@@ -58,6 +62,7 @@ function isCPE(port) {
     return (port.vendorId === "239A") && (port.productId === "8019");
 }
 
+
 function searchForCPE() {
     return new Promise((resolve, reject)=>{
         SerialPort.list(function (err, ports) {
@@ -70,6 +75,7 @@ function searchForCPE() {
     });
 }
 
+
 function getPortInfo() {
     return new Promise((resolve, reject)=>{
         let thisPort = searchForCPE().then(thisPort => {
@@ -81,6 +87,7 @@ function getPortInfo() {
         });
     });
 }
+
 
 function handleSensor(portDetails) {
     //****Open the port*****/
@@ -101,6 +108,7 @@ function handleSensor(portDetails) {
     drawGraph();
 }
 
+
 function drawGraph() {
     const timeToKeepMS = 1 * 1000; //in milliseconds
     var ringBuffer = [];
@@ -111,6 +119,7 @@ function drawGraph() {
     });
 }
 
+
 function cerial() {
     getPortInfo()
         .then( portDetails => handleSensor(portDetails))   
@@ -118,6 +127,7 @@ function cerial() {
     // port.write('ROBOT PLEASE RESPOND\n');
     // The parser will emit any string response
 }
+
 
 function boot() {
     global.hideNotClose = true;
@@ -232,6 +242,3 @@ app.on('ready', boot)
 
 //Catching closing events
 //https://discuss.atom.io/t/how-to-catch-the-event-of-clicking-the-app-windows-close-button-in-electron-app/21425/4
-
-
-
