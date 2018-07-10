@@ -143,7 +143,8 @@ function boot() {
         { type: 'separator' },
         { label: "Don't interrupt me", 
           type: 'radio', 
-          groupId: 1, icon: path.join(__dirname, 'assets', 'icons', 'red.jpg'), 
+          groupId: 1, 
+          icon: path.join(__dirname, 'assets', 'icons', 'red.jpg'), 
           sublabel: "I'm a sublabel",
           click: (item, window, event) => { handleLightStatus("highFocus", item, window, event)}
         },
