@@ -12,18 +12,20 @@ function decodeData(d) {
 }
 
 
+let counter = 0;
 function appendToRing(newData) {
-    ringBuffer.push(newData);
+    global.ringBringBuffer.push(newData);
     var timeNow = newData.timeStamp;
     var cutoffTime = timeNow - timeToKeepMS;
-    var x = ringBuffer.filter(d => d.timeStamp > cutoffTime);
-    ringBuffer = x; // WILL SOMEONE PLEASE EXPLAIN THIS TO ME?
+    var x = global.ringBuffer.filter(d => d.timeStamp > cutoffTime); 
+    // don't need to check for times in the future, because they aren't here yet
+    global.ringBuffer = x; // WILL SOMEONE PLEASE EXPLAIN THIS TO ME?
     // This is O(n), that's probably fine for small arrays. If perf
     // becomes an issue then we could loop from the tail and break
     // once we reach a value that we should keep.
     counter++;
     if (counter%80 == 0){
-        fakeLog(["<p>", counter, timeNow, " buffer: ", ringBuffer, "|EOB</p>"]);
+        fakeLog(["<p>", counter, timeNow, " buffer: ", global.ringBuffer, "|EOB</p>"]);
     }
 }
 
@@ -40,11 +42,11 @@ function fakeLog(text){
         text = text.map(x => JSON.stringify(x));
         text = text.join(", ");
     }
-    console.log("log text is", typeof(text));
+    // console.log("log text is", typeof(text));
     console.log("\n", "fakeLog:", text);
-    let code = `var t = document.getElementById("log");
-                    t.innerHTML = "${text}"`;
-    win.webContents.executeJavaScript(code);
+    // let code = `var t = document.getElementById("log");
+    //                 t.innerHTML = "${text}"`;
+    // win.webContents.executeJavaScript(code);
 }
 
 
@@ -194,19 +196,16 @@ const appVersion = require('./package.json').version;
 const os = require('os').platform();
 
 const isDev = require('electron-is-dev');
-
-const SerialPort = require('serialport');
-const schedule = require('node-schedule');
-
-const timeToKeepMS = 10 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
-var ringBuffer = [];
-var counter = 0;
-
 reportIsDev();
 
-let win = null;
+const SerialPort = require('serialport');
 
-var shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
+const timeToKeepMS = 5 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
+global.ringBuffer = [];
+
+let win;
+
+let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     if (win) {
         // Bringing the window back to the forefront if someone tries to restart the app
         console.log(win);
