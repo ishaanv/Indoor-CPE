@@ -1,5 +1,3 @@
-console.log("I'm in graph.js");
-
 const remote = require('electron').remote;
 var ringBuffer = remote.getGlobal('ringBuffer');
 const schedule = require('node-schedule');
@@ -43,7 +41,7 @@ function getData(buffer){
             };
     let d = [t, s, l];
 
-    console.log(d);
+    // console.log(d);
     return d;
 }
 
@@ -239,7 +237,7 @@ var emptyData =  [  {"sensorType":"sound","value":"15770.6","timeStamp":15311928
 
 function updateGraph() {
     let ringBuffer = remote.getGlobal('ringBuffer');
-    console.log("ringBuffer loc", ringBuffer);
+    // console.log("ringBuffer", ringBuffer);
     Plotly.react('graph', getData(ringBuffer), graphLayout);
 }
 
