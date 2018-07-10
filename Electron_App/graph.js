@@ -238,7 +238,8 @@ var emptyData =  [  {"sensorType":"sound","value":"15770.6","timeStamp":15311928
                     {"sensorType":"light","value":"4576","timeStamp":1531192837228}];
 
 function updateGraph() {
-    console.log("ringBuffer", remote.getGlobal('ringBuffer'));
+    let ringBuffer = remote.getGlobal('ringBuffer');
+    console.log("ringBuffer loc", ringBuffer);
     Plotly.react('graph', getData(ringBuffer), graphLayout);
 }
 
