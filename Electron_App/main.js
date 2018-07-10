@@ -14,7 +14,7 @@ function decodeData(d) {
 
 let counter = 0;
 function appendToRing(newData) {
-    global.ringBringBuffer.push(newData);
+    global.ringBuffer.push(newData);
     var timeNow = newData.timeStamp;
     var cutoffTime = timeNow - timeToKeepMS;
     var x = global.ringBuffer.filter(d => d.timeStamp > cutoffTime); 
@@ -151,7 +151,7 @@ function boot() {
         show:   false
     });
     // win.maximize();
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
     win.setMenu(null);
     win.loadURL(`file://${__dirname}/index.html`);
     win.webContents.on('did-finish-load', ()=>{
