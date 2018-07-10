@@ -9,24 +9,10 @@
 </head>
 <body>
     <div id="content">
-        <div id="graph"></div>
-        <div class="explanation">
-          <p>This is a plotly graph that looks at a lot of data, and only takes 30 seconds worth of it. performance wise it's a monster, but that only really shows up on shim data, and hopefully won't be an issue with a rolling buffer.</p>
-          <h3>TODO:</h3>
-          <ul>
-          <li>The left side doesn't hide the bit where the data disapears, so it's a bit odd that there's a gap.</li>
-          <li>The ticks auto fill, I think I'd like subticks that are at 1s intervals. (or grid lines)</li>
-          <li class="done">There's only one axis, probably should <a href="https://plot.ly/javascript/multiple-axes/#multiple-yaxes">have 3</a></li>
-          </ul>
-          <p>Thoughts?</p>
-        </div>
-        <div id="log">log</div>
-    
-        <!-- <script src="s.js"></script>         -->
+        <div id="graph"></div>    
         <script>
             require("./graph.js");
         </script>
     </div>
-    <!-- <script src="./script.js"></script> -->
 </body>
 </html>
