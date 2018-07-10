@@ -43,7 +43,7 @@ function fakeLog(text){
         text = text.join(", ");
     }
     // console.log("log text is", typeof(text));
-    console.log("\n", "fakeLog:", text);
+    // console.log("\n", "fakeLog:", text);
     // let code = `var t = document.getElementById("log");
     //                 t.innerHTML = "${text}"`;
     // win.webContents.executeJavaScript(code);
@@ -136,10 +136,35 @@ function boot() {
     tray = new Tray(trayIcon);
     //https://electronjs.org/docs/api/tray There's loads of stuff this can do!
     const contextMenu = Menu.buildFromTemplate([
-        {label: "Don't interrupt me", type: 'radio'},
-        {label: "If it's important",  type: 'radio'},
-        {label: "Can be interrupted", type: 'radio', checked: true},
-        {label: 'Off',                type: 'radio'}
+        { label: "Show", 
+          sublabel: "I'm a sublabel", 
+          click: (item, window, event) => {console.log(item, event);}
+        },
+        { type: 'separator' },
+        { label: "Don't interrupt me", 
+          type: 'radio', 
+          groupId: 1, icon: path.join(__dirname, 'assets', 'icons', 'red.jpg'), 
+          sublabel: "I'm a sublabel",
+          click: (item, window, event) => { handleLightStatus("highFocus", item, window, event)}
+        },
+        { label: "If it's important",  
+          type: 'radio', 
+          groupId: 1,
+          icon: path.join(__dirname, 'assets', 'icons', 'green.png'),
+          click: (item, window, event) => { handleLightStatus("medFocus", item, window, event)}
+        },
+        { label: "Can be interrupted", 
+          type: 'radio', 
+          groupId: 1, 
+          icon: path.join(__dirname, 'assets', 'icons', 'orange.jpg'),
+          click: (item, window, event) => { handleLightStatus("lowFocus", item, window, event)}, 
+          checked: true},
+        { label: 'Lights Off',         
+          type: 'radio', 
+          groupId: 1, 
+          icon: path.join(__dirname, 'assets', 'icons', 'black.jpg'),
+          click: (item, window, event) => { handleLightStatus("off", item, window, event)}
+        }
     ])
     tray.setToolTip('Oatmeal');
     tray.setContextMenu(contextMenu);
@@ -175,6 +200,46 @@ function boot() {
       });
 }
 
+
+var fs = require('fs');
+function setLightColour(colour) {
+    fs.writeFile("buffer.txt", colour, function(err) {
+        if(err) {
+            return console.log(err);
+        }
+        console.log("The colour was saved!", colour);
+    }); 
+}
+
+var convert = require('color-convert');
+function handleLightStatus(status, item, window, event) {
+    let colour;
+    switch (status) {
+        case "highFocus":
+            colour = convert.rgb.hex(  0, 150,   0); // subdued red
+            setLightColour(colour);
+            // console.log("highFocus", item, window, event);
+            break;
+        case "medFocus":
+            colour = convert.rgb.hex(255, 150,   0); // orange
+            setLightColour(colour);
+            // console.log("medFocus", item, window, event);
+            break;
+        case "lowFocus":
+            colour = convert.rgb.hex(  0, 255,   0); // green
+            setLightColour(colour);
+            // console.log("lowFocus", item, window, event);
+            break;
+        case "off":
+            colour = convert.rgb.hex(  5,   5,   5); // almost black
+            setLightColour(colour);
+            // console.log("off", item, window, event);
+            break;
+        default:
+          console.log(item, window, event, "something very strange happened. The menu option wasn't recognised.");
+      }
+
+}
 
 function reportIsDev() {
     if (isDev) {
