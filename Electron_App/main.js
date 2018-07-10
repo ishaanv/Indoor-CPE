@@ -145,8 +145,8 @@ function boot() {
     tray.setContextMenu(contextMenu);
     
     win = new BrowserWindow({
-        width:  600,
-        height: 400,
+        width:  1200,
+        height: 900,
         frame:  true,
         show:   false
     });
