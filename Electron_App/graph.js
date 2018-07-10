@@ -255,3 +255,12 @@ function drawGraph() {
 //show the graph with dummy data so that the update has something to update.
 Plotly.plot('graph', getData(emptyData), graphLayout);
 drawGraph();
+
+window.onresize = function() {
+    let g = document.getElementById('graph');
+    Plotly.relayout('graph', {
+        width: g.offsetWidth,
+        height: g.offsetHeight
+        });
+    console.log("resized the graph");
+};
