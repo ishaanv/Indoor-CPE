@@ -179,8 +179,7 @@ function boot() {
 function reportIsDev() {
     if (isDev) {
         console.log('isDev?:', 'Running in development');
-    }
-    else {
+    } else {
         console.log('isDev?:', 'Running in production');
     }
 }
@@ -203,7 +202,7 @@ const SerialPort = require('serialport');
 const timeToKeepMS = 5 * 1000; //in milliseconds //TODO: add this to the UI and make it variable
 global.ringBuffer = [];
 
-let win;
+let win; // this is the main wondow renderer process
 
 let shouldQuit = app.makeSingleInstance(function(commandLine, workingDirectory) {
     if (win) {
