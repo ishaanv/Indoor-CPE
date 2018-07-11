@@ -233,7 +233,7 @@ function boot() {
         {label: 'If it\'s important',
           type: 'radio',
           groupId: 1,
-          icon: path.join(__dirname, 'assets', 'icons', 'green.png'),
+          icon: path.join(__dirname, 'assets', 'icons', 'orange.jpg'),
           click: (item, window, event) => {
                 handleLightStatus('medFocus', item, window, event);
                 },
@@ -241,7 +241,7 @@ function boot() {
         {label: 'Can be interrupted',
           type: 'radio',
           groupId: 1,
-          icon: path.join(__dirname, 'assets', 'icons', 'orange.jpg'),
+          icon: path.join(__dirname, 'assets', 'icons', 'green.png'),
           click: (item, window, event) => {
                 handleLightStatus('lowFocus', item, window, event);
                 },
@@ -309,7 +309,7 @@ function setLightColour(colour) {
         if (err) {
             return console.log(err);
         }
-        console.log('The colour buffer was clered');
+        console.log('The colour buffer was cleared');
     });
 }
 
@@ -326,22 +326,22 @@ function handleLightStatus(status, item, window, event) {
     let colour;
     switch (status) {
         case 'highFocus':
-            colour = convert.rgb.hex( 0, 150, 0); // subdued red
+            colour = convert.rgb.hex(  15,  0, 0); // subdued red
             setLightColour(colour);
             // console.log("highFocus", item, window, event);
             break;
         case 'medFocus':
-            colour = convert.rgb.hex(255, 150, 0); // orange
+            colour = convert.rgb.hex( 10,  5,  0); // orange
             setLightColour(colour);
             // console.log("medFocus", item, window, event);
             break;
         case 'lowFocus':
-            colour = convert.rgb.hex( 0, 255, 0); // green
+            colour = convert.rgb.hex( 0, 10, 0); // green
             setLightColour(colour);
             // console.log("lowFocus", item, window, event);
             break;
         case 'off':
-            colour = convert.rgb.hex( 5, 5, 5); // almost black
+            colour = convert.rgb.hex( 1, 1, 1); // almost black
             setLightColour(colour);
             // console.log("off", item, window, event);
             break;
