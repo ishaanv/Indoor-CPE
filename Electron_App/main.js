@@ -17,6 +17,37 @@ function decodeData(d) {
 }
 
 
+function getDriveLetterOfCPE() { 
+    return new Promise((resolve, reject) => {
+        let ps = new shell({
+        executionPolicy: 'Bypass',
+        noProfile: true
+        });
+        
+        ps.addCommand('Get-CimInstance Win32_logicaldisk')
+        ps.invoke()
+            .then(output => {
+                let lines = output.split("\n");
+                let cpeLine = lines.filter(line => line.indexOf("CIRCUITPY") != -1);
+                let parts = cpeLine[0].split(/\s+/);
+                let driveLetter = parts[0][0];
+                /* This isn't actually needed, could just pull the first letter 
+                    of the line. This could be a bit more robust if I looked for 
+                    the part with the colon. */
+                console.log("CPE drive letter:", driveLetter);
+                ps.dispose();
+                CPEdriveLetter = driveLetter;
+                resolve(driveLetter);
+            })
+            .catch(err => {
+                console.log(err);
+                ps.dispose();
+                reject(err);
+            }
+        );
+    });
+}
+
 let counter = 0;
 /**
  * Adds data to the buffer, and trims old data off the back edge
@@ -265,11 +296,20 @@ let fs = require('fs');
  * @param {string} colour
  */
 function setLightColour(colour) {
-    fs.writeFile('buffer.txt', colour, function(err) {
+    let CPEpath = path.join(CPEdriveLetter + ":", 'buffer.txt');
+    console.log("CPEdriveLetter:", CPEdriveLetter, "CPEpath:", CPEpath);
+    fs.writeFile(CPEpath, colour, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log('The colour was saved!', colour);
+    });
+
+    fs.writeFile(CPEpath, "", function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('The colour buffer was clered');
     });
 }
 
@@ -335,6 +375,13 @@ const isDev = require('electron-is-dev');
 reportIsDev();
 
 const SerialPort = require('serialport');
+
+const shell = require('node-powershell');
+let CPEdriveLetter = "X"; //Risk of a race condition
+getDriveLetterOfCPE()
+    .then(  d=>CPEdriveLetter=d)
+    .catch( e=>console.log(e)  );
+
 
 const timeToKeepMS = 5 * 1000; // in milliseconds
 // TODO: add this to the UI and make it variable
