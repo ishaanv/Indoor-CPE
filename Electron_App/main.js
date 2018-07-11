@@ -17,6 +17,37 @@ function decodeData(d) {
 }
 
 
+function getDriveLetterOfCPE() { 
+    return new Promise((resolve, reject) => {
+        let ps = new shell({
+        executionPolicy: 'Bypass',
+        noProfile: true
+        });
+        
+        ps.addCommand('Get-CimInstance Win32_logicaldisk')
+        ps.invoke()
+            .then(output => {
+                let lines = output.split("\n");
+                let cpeLine = lines.filter(line => line.indexOf("CIRCUITPY") != -1);
+                let parts = cpeLine[0].split(/\s+/);
+                let driveLetter = parts[0][0];
+                /* This isn't actually needed, could just pull the first letter 
+                    of the line. This could be a bit more robust if I looked for 
+                    the part with the colon. */
+                console.log("CPE drive letter:", driveLetter);
+                ps.dispose();
+                CPEdriveLetter = driveLetter;
+                resolve(driveLetter);
+            })
+            .catch(err => {
+                console.log(err);
+                ps.dispose();
+                reject(err);
+            }
+        );
+    });
+}
+
 let counter = 0;
 /**
  * Adds data to the buffer, and trims old data off the back edge
@@ -202,7 +233,7 @@ function boot() {
         {label: 'If it\'s important',
           type: 'radio',
           groupId: 1,
-          icon: path.join(__dirname, 'assets', 'icons', 'green.png'),
+          icon: path.join(__dirname, 'assets', 'icons', 'orange.jpg'),
           click: (item, window, event) => {
                 handleLightStatus('medFocus', item, window, event);
                 },
@@ -210,7 +241,7 @@ function boot() {
         {label: 'Can be interrupted',
           type: 'radio',
           groupId: 1,
-          icon: path.join(__dirname, 'assets', 'icons', 'orange.jpg'),
+          icon: path.join(__dirname, 'assets', 'icons', 'green.png'),
           click: (item, window, event) => {
                 handleLightStatus('lowFocus', item, window, event);
                 },
@@ -265,11 +296,20 @@ let fs = require('fs');
  * @param {string} colour
  */
 function setLightColour(colour) {
-    fs.writeFile('buffer.txt', colour, function(err) {
+    let CPEpath = path.join(CPEdriveLetter + ":", 'buffer.txt');
+    console.log("CPEdriveLetter:", CPEdriveLetter, "CPEpath:", CPEpath);
+    fs.writeFile(CPEpath, colour, function(err) {
         if (err) {
             return console.log(err);
         }
         console.log('The colour was saved!', colour);
+    });
+
+    fs.writeFile(CPEpath, "", function(err) {
+        if (err) {
+            return console.log(err);
+        }
+        console.log('The colour buffer was cleared');
     });
 }
 
@@ -286,22 +326,22 @@ function handleLightStatus(status, item, window, event) {
     let colour;
     switch (status) {
         case 'highFocus':
-            colour = convert.rgb.hex( 0, 150, 0); // subdued red
+            colour = convert.rgb.hex(  15,  0, 0); // subdued red
             setLightColour(colour);
             // console.log("highFocus", item, window, event);
             break;
         case 'medFocus':
-            colour = convert.rgb.hex(255, 150, 0); // orange
+            colour = convert.rgb.hex( 10,  5,  0); // orange
             setLightColour(colour);
             // console.log("medFocus", item, window, event);
             break;
         case 'lowFocus':
-            colour = convert.rgb.hex( 0, 255, 0); // green
+            colour = convert.rgb.hex( 0, 10, 0); // green
             setLightColour(colour);
             // console.log("lowFocus", item, window, event);
             break;
         case 'off':
-            colour = convert.rgb.hex( 5, 5, 5); // almost black
+            colour = convert.rgb.hex( 1, 1, 1); // almost black
             setLightColour(colour);
             // console.log("off", item, window, event);
             break;
@@ -335,6 +375,13 @@ const isDev = require('electron-is-dev');
 reportIsDev();
 
 const SerialPort = require('serialport');
+
+const shell = require('node-powershell');
+let CPEdriveLetter = "X"; //Risk of a race condition
+getDriveLetterOfCPE()
+    .then(  d=>CPEdriveLetter=d)
+    .catch( e=>console.log(e)  );
+
 
 const timeToKeepMS = 5 * 1000; // in milliseconds
 // TODO: add this to the UI and make it variable
