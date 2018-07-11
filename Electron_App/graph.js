@@ -6,9 +6,13 @@ function getValue(dataPair) {
     return dataPair['value'];
 }
 
+const moment = require('moment'); 
 /** extract just the timestamp */
 function getTime(dataPair) {
-    return dataPair['timeStamp'];
+    let eTime = dataPair['timeStamp'];
+    let stamp = moment(eTime).toISOString(true);
+    //Tried .format('GGGG: h:mm:ss.SS');//h:mm:ss.SSSS, but it freaked out!
+    return stamp;
 }
 
 /**
