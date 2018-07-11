@@ -51,7 +51,7 @@ function getData(buffer) {
 
 
 let graphLayout = {
-    title: `A rolling chunk of data`,
+    title: `Your Environmental Data`,
     // width: 1200,
     plot_bgcolor: 'hsl(200, 18%, 80%)',
     paper_bgcolor: 'hsl(200, 18%, 20%)',
@@ -61,6 +61,8 @@ let graphLayout = {
         title: 'Temperature',
         titlefont: {color: 'rgb(31, 119, 180)'},
         tickfont: {color: 'rgb(31, 119, 180)'},
+        range: [19, 30],
+        mode: 'lines',
     },
     yaxis2: {
         title: 'Sound Volume',
@@ -70,6 +72,8 @@ let graphLayout = {
         overlaying: 'y',
         side: 'left',
         position: 0,
+        range: [0, 2000],
+        // type: 'log',
     },
     yaxis3: {
         title: 'Light stuff',
@@ -78,6 +82,8 @@ let graphLayout = {
         anchor: 'x',
         overlaying: 'y',
         side: 'right',
+        range: [0, 8000],
+        // type: 'log',
     },
 };
 
