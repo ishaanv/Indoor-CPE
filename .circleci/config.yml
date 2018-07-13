@@ -1,0 +1,14 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.7-node-browsers
+    steps:
+      - checkout
+      - run: <command>
+  test:
+    docker:
+      - image: circleci/python:3.7-node-browsers
+    steps:
+      - checkout
+      - run: <command>
