@@ -14,47 +14,39 @@ import supervisor
 import constants as c
 
 supervisor.disable_autoreload()
-
 """ Initialise RGB colour list. """
 colour = [0, 0, 0]
-
 """ Initialise scheduling variables. """
 last = time.monotonic()
 light_last = last
 temp_last = last
 sound_last = last
 neopixel_last = last
-
 """ Initialise neopixels
     brightness is a value from 0-1
     auto_write = True means the pixels
     value change without show,
     but is extremely slow
 """
-pixels = neopixel.NeoPixel(board.NEOPIXEL, c.NUM_PIXELS,
-                           brightness=1, auto_write=False)
-
+pixels = neopixel.NeoPixel(
+    board.NEOPIXEL, c.NUM_PIXELS, brightness=1, auto_write=False)
 """ Initialise thermistor. """
-thermistor = adafruit_thermistor.Thermistor(
-    board.TEMPERATURE,
-    c.RMEASURED,
-    c.NOMINALRESISTOR,
-    c.NOMINALTEMPERATURE,
-    c.BETACOEF)
-
+thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE, c.RMEASURED,
+                                            c.NOMINALRESISTOR,
+                                            c.NOMINALTEMPERATURE, c.BETACOEF)
 """ Initialise light ADC. """
 light = AnalogIn(board.LIGHT)
-
 """ Initialise sound measurements. """
-mic = audiobusio.PDMIn(board.MICROPHONE_CLOCK,
-                       board.MICROPHONE_DATA,
-                       sample_rate=44100,
-                       bit_depth=16
-                       )
+mic = audiobusio.PDMIn(
+    board.MICROPHONE_CLOCK,
+    board.MICROPHONE_DATA,
+    sample_rate=44100,
+    bit_depth=16)
 # Record an initial sample to calibrate. Assume it's quiet when we start.
 # TODO: this is dangerous, get rid of it
 samples = array.array('H', [0] * c.NUM_SAMPLES)
 mic.record(samples, len(samples))
+
 # Set lowest level to expect, plus a little.
 # input_floor = normalized_rms(samples) + 10
 
@@ -72,9 +64,7 @@ def normalized_rms(values):
     """
     # Remove DC bias before computing RMS.
     dc_bias = int(mean(values))
-    sum_squares = sum(
-        float((sample-dc_bias)**2)
-        for sample in values)
+    sum_squares = sum(float((sample - dc_bias)**2) for sample in values)
     return math.sqrt(sum_squares / len(values))
 
 
@@ -140,18 +130,11 @@ if __name__ == "__main__":
         # Serial print the value of the sensor value
         # and update last time if scheduled
         # last value is passed through if not scheduled
-        light_last = analog_serial(light.value,
-                                   c.INTERVAL_LIGHT,
-                                   now,
+        light_last = analog_serial(light.value, c.INTERVAL_LIGHT, now,
                                    light_last)
         temp_last = analog_serial(thermistor.temperature,
-                                  c.INTERVAL_TEMPERATURE,
-                                  now,
-                                  temp_last)
-        sound_last = sound_serial(mic,
-                                  samples,
-                                  c.INTERVAL_SOUND,
-                                  now,
+                                  c.INTERVAL_TEMPERATURE, now, temp_last)
+        sound_last = sound_serial(mic, samples, c.INTERVAL_SOUND, now,
                                   sound_last)
 
         # read the byte size of the file from the stat tuple
@@ -159,5 +142,5 @@ if __name__ == "__main__":
 
         # update neopixel colour value if BUFFERNAME is not empty
         # serial prints new value until value is deleted
-        neopixel_last = neopixel_control(
-            fsize, c.BUFFERNAME, c.INTERVAL_PIXEL, now, neopixel_last)
+        neopixel_last = neopixel_control(fsize, c.BUFFERNAME, c.INTERVAL_PIXEL,
+                                         now, neopixel_last)

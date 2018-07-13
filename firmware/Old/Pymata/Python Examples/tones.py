@@ -5,7 +5,6 @@ import sys
 # Import CircuitPlayground class from the circuitplayground.py in the same directory.
 from circuitplayground import CircuitPlayground
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
@@ -30,13 +29,15 @@ for note in scale:
     board.tone(note, duration)
     # Wait for the tone to finish playing, and add a small delay between notes
     # (100 ms).
-    time.sleep((duration+100.0)/1000.0)  # time.sleep expects seconds, so divide duration by 1000.
+    time.sleep(
+        (duration + 100.0) /
+        1000.0)  # time.sleep expects seconds, so divide duration by 1000.
 
 # Demonstrate continuous tone playback and no_tone to stop playback.
 print('Playing note, then stopping after 1 second.')
 board.tone(scale[0])  # This will start playing the first not forever.
-time.sleep(1.0)       # Now wait 1 second.
-board.no_tone()       # Stop tone playback.
+time.sleep(1.0)  # Now wait 1 second.
+board.no_tone()  # Stop tone playback.
 
 # Close Firmata board connection when done.
 board.close()

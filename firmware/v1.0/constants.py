@@ -3,21 +3,17 @@ import microcontroller
 Unique ID of hardware. Unique to each CPE
 reads a utf-8 bytearray is actually utf-16
 """
-ID = microcontroller.cpu.uid 
-
-
+ID = microcontroller.cpu.uid
 """
 INTERVAL_*value* is the sample rate at which the value 
     is read and therefore sent to the serial port
 """
-
 """
 SOUND constants
 
 """
 NUM_SAMPLES = 50
 INTERVAL_SOUND = 0.1
-
 """
 TEMPERATURE constants
 NOMINALRESISTOR the nominal resistance of the 
@@ -47,8 +43,6 @@ RMEASURED = 11371.93
 BETACOEF = 3950
 
 INTERVAL_TEMPERATURE = 1
-
-
 """
 NEOPIXEL constants
 NUM_PIXELS is the number of neopixels on board
@@ -61,8 +55,6 @@ TEMPERATURE constants
 
 """
 INTERVAL_LIGHT = 0.2
-
-
 """
 FILE values
 

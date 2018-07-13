@@ -55,8 +55,6 @@ def cb_push_button(data):
     os.kill(os.getpid(), signal.SIGSEGV)
 
 
-
-
 # Create a PyMata instance
 # board = PyMata("COM6", verbose=True)
 board = CircuitPlayground("COM7")
@@ -68,7 +66,10 @@ def signal_handler(sig, frame):
         board.reset()
     sys.exit(0)
 
+
 board.set_pixel_brightness(50)
+
+
 def signal_pixel(sig, frame):
     if board is not None:
         for i in range(10):
@@ -86,12 +87,10 @@ def signal_pixel(sig, frame):
 signal.signal(signal.SIGSEGV, signal_pixel)
 # signal.signal(signal.SIGINT, signal_handler)
 
-
 # Set pin modes
 board.set_pin_mode(GREEN_LED, board.OUTPUT, board.DIGITAL)
 board.set_pin_mode(PUSH_BUTTON, board.INPUT, board.DIGITAL, cb_push_button)
 # board.set_pin_mode(19, board.INPUT, board.DIGITAL, sys.exit(0))
-
 
 # Do nothing loop - program exits when latch data event occurs for
 # potentiometer or timer expires

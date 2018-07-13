@@ -5,12 +5,12 @@ import sys
 # Import CircuitPlayground class from the circuitplayground.py in the same directory.
 from circuitplayground import CircuitPlayground
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
     sys.exit(-1)
 port = sys.argv[1]
+
 
 # Define a function which will be called when a color is detect and received.
 # The red green blue parameters will be set with values from 0 to 255 (inclusive)
@@ -18,6 +18,7 @@ port = sys.argv[1]
 # is maximum intensity).
 def color(red, green, blue):
     print('Detected red={0} green={1} blue={2}'.format(red, green, blue))
+
 
 # Connect to Circuit Playground board on specified port.
 board = CircuitPlayground(port)

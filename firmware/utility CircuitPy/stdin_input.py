@@ -11,7 +11,6 @@ import board
 import time
 from analogio import AnalogIn
 
-
 while True:
-	x = sys.stdin.readline()
-	print(x)
+    x = sys.stdin.readline()
+    print(x)

@@ -1,14 +1,13 @@
-
 import os
 
 
 class FileRingBuffer():
-    def __init__(self, filename, size_rows, size_line=100,clear=False):
+    def __init__(self, filename, size_rows, size_line=100, clear=False):
         # check if file exists
         if not os.path.isfile(filename):
             open(filename, 'w').close()
         self.filename = filename
-        
+
         self.size_rows = int(size_rows)
         self.size_line = int(size_line)
         if clear:
@@ -29,8 +28,8 @@ class FileRingBuffer():
         if num_rows >= self.size_rows:
             n = self._string_conditioned(row).count('\n')
             self.pop(num_rows + n - self.size_rows)
-    
-    def _string_conditioned(self,string):
+
+    def _string_conditioned(self, string):
         '''
         Ensures ends with \n only
         '''
@@ -48,7 +47,7 @@ class FileRingBuffer():
 
     def flush(self):
         with open(self.filename, 'w') as fd:
-            fd.truncate(0)  
+            fd.truncate(0)
 
     def delete(self):
         os.rmdir(self.filename)

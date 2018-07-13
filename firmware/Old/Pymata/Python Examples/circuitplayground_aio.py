@@ -35,84 +35,82 @@ import struct
 # from PyMata.pymata import PyMata
 from pymata_aio.pymata3 import PyMata3
 
-
 # Constants that define the Circuit Playground Firmata command values.
-CP_COMMAND              = 0x40  # Byte that identifies all Circuit Playground commands.
-CP_PIXEL_SET            = 0x10  # Set NeoPixel, expects the following bytes as data:
-                                #  - Pixel ID (0-9)
-                                #  - Pixel RGB color data as 4 7-bit bytes.  The upper
-                                #    24 bits will be mapped to the R, G, B bytes.
-CP_PIXEL_SHOW           = 0x11  # Update NeoPixels with their current color values.
-CP_PIXEL_CLEAR          = 0x12  # Clear all NeoPixels to black/off.  Must call show pixels after this to see the change!
-CP_PIXEL_BRIGHTNESS     = 0x13  # Set the brightness of the NeoPixels, just like calling the
-                                # NeoPixel library setBrightness function.  Takes one parameter
-                                # which is a single byte with a value 0-100.
-CP_TONE                 = 0x20  # Play a tone on the speaker, expects the following bytes as data:
-                                #  - Frequency (hz) as 2 7-bit bytes (up to 2^14 hz, or about 16khz)
-                                #  - Duration (ms) as 2 7-bit bytes.
-CP_NO_TONE              = 0x21  # Stop playing anything on the speaker.
-CP_ACCEL_READ           = 0x30  # Return the current x, y, z accelerometer values.
-CP_ACCEL_TAP            = 0x31  # Return the current accelerometer tap state.
-CP_ACCEL_READ_REPLY     = 0x36  # Result of an acceleromete read.  Includes 3 floating point values (4 bytes each) with x, y, z
-                                # acceleration in meters/second^2.
-CP_ACCEL_TAP_REPLY      = 0x37  # Result of the tap sensor read.  Includes a byte with the tap register value.
-CP_ACCEL_TAP_STREAM_ON  = 0x38  # Turn on continuous streaming of tap data.
+CP_COMMAND = 0x40  # Byte that identifies all Circuit Playground commands.
+CP_PIXEL_SET = 0x10  # Set NeoPixel, expects the following bytes as data:
+#  - Pixel ID (0-9)
+#  - Pixel RGB color data as 4 7-bit bytes.  The upper
+#    24 bits will be mapped to the R, G, B bytes.
+CP_PIXEL_SHOW = 0x11  # Update NeoPixels with their current color values.
+CP_PIXEL_CLEAR = 0x12  # Clear all NeoPixels to black/off.  Must call show pixels after this to see the change!
+CP_PIXEL_BRIGHTNESS = 0x13  # Set the brightness of the NeoPixels, just like calling the
+# NeoPixel library setBrightness function.  Takes one parameter
+# which is a single byte with a value 0-100.
+CP_TONE = 0x20  # Play a tone on the speaker, expects the following bytes as data:
+#  - Frequency (hz) as 2 7-bit bytes (up to 2^14 hz, or about 16khz)
+#  - Duration (ms) as 2 7-bit bytes.
+CP_NO_TONE = 0x21  # Stop playing anything on the speaker.
+CP_ACCEL_READ = 0x30  # Return the current x, y, z accelerometer values.
+CP_ACCEL_TAP = 0x31  # Return the current accelerometer tap state.
+CP_ACCEL_READ_REPLY = 0x36  # Result of an acceleromete read.  Includes 3 floating point values (4 bytes each) with x, y, z
+# acceleration in meters/second^2.
+CP_ACCEL_TAP_REPLY = 0x37  # Result of the tap sensor read.  Includes a byte with the tap register value.
+CP_ACCEL_TAP_STREAM_ON = 0x38  # Turn on continuous streaming of tap data.
 CP_ACCEL_TAP_STREAM_OFF = 0x39  # Turn off streaming of tap data.
-CP_ACCEL_STREAM_ON      = 0x3A  # Turn on continuous streaming of accelerometer data.
-CP_ACCEL_STREAM_OFF     = 0x3B  # Turn off streaming of accelerometer data.
-CP_ACCEL_RANGE          = 0x3C  # Set the range of the accelerometer, takes one byte as a parameter.
-                                # Use a value 0=+/-2G, 1=+/-4G, 2=+/-8G, 3=+/-16G
-CP_ACCEL_TAP_CONFIG     = 0x3D  # Set the sensitivity of the tap detection, takes 4 bytes of 7-bit firmata
-                                # data as parameters which expand to 2 unsigned 8-bit bytes value to set:
-                                #   - Type of click: 0 = no click detection, 1 = single click, 2 = single & double click (default)
-                                #   - Click threshold: 0-255, the higher the value the less sensitive.  Depends on the accelerometer
-                                #     range, good values are: +/-16G = 5-10, +/-8G = 10-20, +/-4G = 20-40, +/-2G = 40-80
-                                #     80 is the default value (goes well with default of +/-2G)
-CP_CAP_READ             = 0x40  # Read a single capacitive input.  Expects a byte as a parameter with the
-                                # cap touch input to read (0, 1, 2, 3, 6, 9, 10, 12).  Will respond with a
-                                # CP_CAP_REPLY message.
-CP_CAP_ON               = 0x41  # Turn on continuous cap touch reads for the specified input (sent as a byte parameter).
-CP_CAP_OFF              = 0x42  # Turn off continuous cap touch reads for the specified input (sent as a byte parameter).
-CP_CAP_REPLY            = 0x43  # Capacitive input read response.  Includes a byte with the pin # of the cap input, then
-                                # four bytes of data which represent an int32_t value read from the cap input.
-CP_SENSECOLOR           = 0x50  # Perform a color sense using the NeoPixel and light sensor.
-CP_SENSECOLOR_REPLY     = 0x51  # Result of a color sense, will return the red, green, blue color
-                                # values that were read from the light sensor.  This will return
-                                # 6 bytes of data:
-                                #  - red color (unsigned 8 bit value, split across 2 7-bit bytes)
-                                #  - green color (unsigned 8 bit value, split across 2 7-bit bytes)
-                                #  - blue color (unsigned 8 bit value, split across 2 7-bit bytes)
-
-
+CP_ACCEL_STREAM_ON = 0x3A  # Turn on continuous streaming of accelerometer data.
+CP_ACCEL_STREAM_OFF = 0x3B  # Turn off streaming of accelerometer data.
+CP_ACCEL_RANGE = 0x3C  # Set the range of the accelerometer, takes one byte as a parameter.
+# Use a value 0=+/-2G, 1=+/-4G, 2=+/-8G, 3=+/-16G
+CP_ACCEL_TAP_CONFIG = 0x3D  # Set the sensitivity of the tap detection, takes 4 bytes of 7-bit firmata
+# data as parameters which expand to 2 unsigned 8-bit bytes value to set:
+#   - Type of click: 0 = no click detection, 1 = single click, 2 = single & double click (default)
+#   - Click threshold: 0-255, the higher the value the less sensitive.  Depends on the accelerometer
+#     range, good values are: +/-16G = 5-10, +/-8G = 10-20, +/-4G = 20-40, +/-2G = 40-80
+#     80 is the default value (goes well with default of +/-2G)
+CP_CAP_READ = 0x40  # Read a single capacitive input.  Expects a byte as a parameter with the
+# cap touch input to read (0, 1, 2, 3, 6, 9, 10, 12).  Will respond with a
+# CP_CAP_REPLY message.
+CP_CAP_ON = 0x41  # Turn on continuous cap touch reads for the specified input (sent as a byte parameter).
+CP_CAP_OFF = 0x42  # Turn off continuous cap touch reads for the specified input (sent as a byte parameter).
+CP_CAP_REPLY = 0x43  # Capacitive input read response.  Includes a byte with the pin # of the cap input, then
+# four bytes of data which represent an int32_t value read from the cap input.
+CP_SENSECOLOR = 0x50  # Perform a color sense using the NeoPixel and light sensor.
+CP_SENSECOLOR_REPLY = 0x51  # Result of a color sense, will return the red, green, blue color
+# values that were read from the light sensor.  This will return
+# 6 bytes of data:
+#  - red color (unsigned 8 bit value, split across 2 7-bit bytes)
+#  - green color (unsigned 8 bit value, split across 2 7-bit bytes)
+#  - blue color (unsigned 8 bit value, split across 2 7-bit bytes)
 
 # Accelerometer constants to be passed to set_accel_range.
-ACCEL_2G  = 0
-ACCEL_4G  = 1
-ACCEL_8G  = 2
+ACCEL_2G = 0
+ACCEL_4G = 1
+ACCEL_8G = 2
 ACCEL_16G = 3
 
 # Constants for some of the board peripherals
-THERM_PIN          = 0        # Analog input connected to the thermistor.
-THERM_SERIES_OHMS  = 10000.0  # Resistor value in series with thermistor.
+THERM_PIN = 0  # Analog input connected to the thermistor.
+THERM_SERIES_OHMS = 10000.0  # Resistor value in series with thermistor.
 THERM_NOMINAL_OHMS = 10000.0  # Thermistor resistance at 25 degrees C.
-THERM_NOMIMAL_C    = 25.0     # Thermistor temperature at nominal resistance.
-THERM_BETA         = 3950.0   # Thermistor beta coefficient.
-CAP_THRESHOLD      = 300      # Threshold for considering a cap touch input pressed.
-                              # If the cap touch value is above this value it is
-                              # considered touched.
+THERM_NOMIMAL_C = 25.0  # Thermistor temperature at nominal resistance.
+THERM_BETA = 3950.0  # Thermistor beta coefficient.
+CAP_THRESHOLD = 300  # Threshold for considering a cap touch input pressed.
+# If the cap touch value is above this value it is
+# considered touched.
 
 logger = logging.getLogger(__name__)
 
 
 class CircuitPlayground(PyMata3):
-
     def __init__(self, port_id='/dev/ttyACM0', bluetooth=True, verbose=True):
         # PyMata is an old style class so you can't use super.
         PyMata3.__init__(self, port_id, bluetooth, verbose)
         # Setup handler for response data.
         # Note that the data length (1) appears to be unused for these sysex
         # responses.
-        self._command_handler.command_dispatch.update({CP_COMMAND: [self._response_handler, 1]})
+        self._command_handler.command_dispatch.update({
+            CP_COMMAND: [self._response_handler, 1]
+        })
         # Setup configured callbacks to null.
         self._accel_callback = None
         self._tap_callback = None
@@ -130,7 +128,7 @@ class CircuitPlayground(PyMata3):
         if adc_value == 0:
             return float('NaN')
         # First calculate the resistance of the thermistor based on its ADC value.
-        resistance = ((4095.0 * THERM_SERIES_OHMS)/adc_value)
+        resistance = ((4095.0 * THERM_SERIES_OHMS) / adc_value)
         resistance -= THERM_SERIES_OHMS
         # Now apply Steinhart-Hart equation.
         steinhart = resistance / THERM_NOMINAL_OHMS
@@ -154,7 +152,8 @@ class CircuitPlayground(PyMata3):
     def _parse_firmata_byte(self, data):
         """Parse a byte value from two 7-bit byte firmata response bytes."""
         if len(data) != 2:
-            raise ValueError('Expected 2 bytes of firmata repsonse for a byte value!')
+            raise ValueError(
+                'Expected 2 bytes of firmata repsonse for a byte value!')
         return (data[0] & 0x7F) | ((data[1] & 0x01) << 7)
 
     def _parse_firmata_float(self, data):
@@ -163,12 +162,14 @@ class CircuitPlayground(PyMata3):
         byte of float data so there should be 8 firmata response bytes total.
         """
         if len(data) != 8:
-            raise ValueError('Expected 8 bytes of firmata response for floating point value!')
+            raise ValueError(
+                'Expected 8 bytes of firmata response for floating point value!'
+            )
         # Convert 2 7-bit bytes in little endian format to 1 8-bit byte for each
         # of the four floating point bytes.
         raw_bytes = bytearray(4)
         for i in range(4):
-            raw_bytes[i] = self._parse_firmata_byte(data[i*2:i*2+2])
+            raw_bytes[i] = self._parse_firmata_byte(data[i * 2:i * 2 + 2])
         # Use struct unpack to convert to floating point value.
         return struct.unpack('<f', raw_bytes)[0]
 
@@ -178,12 +179,13 @@ class CircuitPlayground(PyMata3):
         byte of long data so there should be 8 firmata response bytes total.
         """
         if len(data) != 8:
-            raise ValueError('Expected 8 bytes of firmata response for long value!')
+            raise ValueError(
+                'Expected 8 bytes of firmata response for long value!')
         # Convert 2 7-bit bytes in little endian format to 1 8-bit byte for each
         # of the four floating point bytes.
         raw_bytes = bytearray(4)
         for i in range(4):
-            raw_bytes[i] = self._parse_firmata_byte(data[i*2:i*2+2])
+            raw_bytes[i] = self._parse_firmata_byte(data[i * 2:i * 2 + 2])
         # Use struct unpack to convert to floating point value.
         return struct.unpack('<l', raw_bytes)[0]
 
@@ -213,13 +215,14 @@ class CircuitPlayground(PyMata3):
         if command == CP_ACCEL_READ_REPLY:
             # Parse accelerometer response.
             if len(data) < 26:
-                logger.warning('Received accelerometer response with not enough data!')
+                logger.warning(
+                    'Received accelerometer response with not enough data!')
                 return
             x = self._parse_firmata_float(data[2:10])
             y = self._parse_firmata_float(data[10:18])
             z = self._parse_firmata_float(data[18:26])
             if self._accel_callback is not None:
-                self._accel_callback(x, y ,z)
+                self._accel_callback(x, y, z)
         elif command == CP_ACCEL_TAP_REPLY:
             # Parse accelerometer tap response.
             if len(data) < 4:
@@ -231,7 +234,8 @@ class CircuitPlayground(PyMata3):
         elif command == CP_CAP_REPLY:
             # Parse capacitive sensor response.
             if len(data) < 12:
-                logger.warning('Received cap touch response with not enough data!')
+                logger.warning(
+                    'Received cap touch response with not enough data!')
                 return
             input_pin = self._parse_firmata_byte(data[2:4])
             value = self._parse_firmata_long(data[4:12])
@@ -240,7 +244,8 @@ class CircuitPlayground(PyMata3):
         elif command == CP_SENSECOLOR_REPLY:
             # Parse sense color response.
             if len(data) < 8:
-                logger.warning('Received color sense response with not enough data!')
+                logger.warning(
+                    'Received color sense response with not enough data!')
                 return
             # Parse out the red, green, blue color bytes.
             red = self._parse_firmata_byte(data[2:4])
@@ -267,7 +272,8 @@ class CircuitPlayground(PyMata3):
         b2 = ((red & 0x01) << 6) | (green >> 2)
         b3 = ((green & 0x03) << 5) | (blue >> 3)
         b4 = (blue & 0x07) << 4
-        self._command_handler.send_sysex(CP_COMMAND, [CP_PIXEL_SET, pixel, b1, b2, b3, b4])
+        self._command_handler.send_sysex(CP_COMMAND,
+                                         [CP_PIXEL_SET, pixel, b1, b2, b3, b4])
 
     def clear_pixels(self):
         """Clear all the pixels on the Circuit Playground board.  Make sure to
@@ -291,7 +297,8 @@ class CircuitPlayground(PyMata3):
         of pixels that are later set.
         """
         assert brightness >= 0 and brightness <= 100, 'Brightness must be a value of 0-100!'
-        self._command_handler.send_sysex(CP_COMMAND, [CP_PIXEL_BRIGHTNESS, brightness & 0x7F])
+        self._command_handler.send_sysex(
+            CP_COMMAND, [CP_PIXEL_BRIGHTNESS, brightness & 0x7F])
 
     def tone(self, frequency_hz, duration_ms=0):
         """Play a tone with the specified frequency (in hz) for the specified
@@ -364,7 +371,8 @@ class CircuitPlayground(PyMata3):
         start_temperature once to initialize it!).
         """
         self._temp_callback = callback
-        self.set_pin_mode(THERM_PIN, self.INPUT, self.ANALOG, self._therm_handler)
+        self.set_pin_mode(THERM_PIN, self.INPUT, self.ANALOG,
+                          self._therm_handler)
 
     def stop_temperature(self):
         """Stop streaming temperature data from the thermistor."""
@@ -397,10 +405,13 @@ class CircuitPlayground(PyMata3):
         touch library result (bigger values mean more capacitance, i.e. something
         is touching the input).
         """
-        assert input_pin in [0, 1, 2, 3, 6, 9, 10, 12], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
+        assert input_pin in [
+            0, 1, 2, 3, 6, 9, 10, 12
+        ], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
         self._cap_callback = callback
         # Construct a cap read command and send it.
-        self._command_handler.send_sysex(CP_COMMAND, [CP_CAP_READ, input_pin & 0x7F])
+        self._command_handler.send_sysex(CP_COMMAND,
+                                         [CP_CAP_READ, input_pin & 0x7F])
 
     def start_cap_touch(self, input_pin, callback=None):
         """Start continuous capacitive touch queries for the specified input
@@ -409,19 +420,25 @@ class CircuitPlayground(PyMata3):
         instances previously specified).  See read_cap_touch for a description of
         the callback parameters.
         """
-        assert input_pin in [0, 1, 2, 3, 6, 9, 10, 12], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
+        assert input_pin in [
+            0, 1, 2, 3, 6, 9, 10, 12
+        ], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
         self._cap_callback = callback
         # Construct a continuous cap read start command and send it.
-        self._command_handler.send_sysex(CP_COMMAND, [CP_CAP_ON, input_pin & 0x7F])
+        self._command_handler.send_sysex(CP_COMMAND,
+                                         [CP_CAP_ON, input_pin & 0x7F])
 
     def stop_cap_touch(self, input_pin):
         """Stop continuous capacitive touch queries for the specified input
         pin.
         """
-        assert input_pin in [0, 1, 2, 3, 6, 9, 10, 12], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
+        assert input_pin in [
+            0, 1, 2, 3, 6, 9, 10, 12
+        ], 'Input pin must be a capacitive input (0,1,2,3,6,9,10,12)!'
         self._cap_callback = None
         # Construct a continuous cap read stop command and send it.
-        self._command_handler.send_sysex(CP_COMMAND, [CP_CAP_OFF, input_pin & 0x7F])
+        self._command_handler.send_sysex(CP_COMMAND,
+                                         [CP_CAP_OFF, input_pin & 0x7F])
 
     def set_accel_range(self, accel_range=0):
         """Set the range of the accelerometer.  Accel_range should be a value of:
@@ -430,8 +447,10 @@ class CircuitPlayground(PyMata3):
           - 2 = +/-8G
           - 3 = +/-16G
         """
-        assert accel_range in [0, 1, 2, 3], 'Accel range must be one of 0, 1, 2, 3!'
-        self._command_handler.send_sysex(CP_COMMAND, [CP_ACCEL_RANGE, accel_range & 0x7F])
+        assert accel_range in [0, 1, 2,
+                               3], 'Accel range must be one of 0, 1, 2, 3!'
+        self._command_handler.send_sysex(CP_COMMAND,
+                                         [CP_ACCEL_RANGE, accel_range & 0x7F])
 
     def set_tap_config(self, tap_type=0, threshold=80):
         """Set the tap detection configuration.  Tap_type should be a value of:
@@ -451,13 +470,15 @@ class CircuitPlayground(PyMata3):
         # Assemble data to send by turning each unsigned 8 bit values into two
         # 7-bit values that firmata can understand.  The most significant bits
         # are first and the least significant (7th) bit follows.
-        tap_type_low  = tap_type & 0x7F
+        tap_type_low = tap_type & 0x7F
         tap_type_high = (tap_type & 0xFF) >> 7
-        threshold_low  = threshold & 0x7F
+        threshold_low = threshold & 0x7F
         threshold_high = (threshold & 0xFF) >> 7
         # Send command.
-        self._command_handler.send_sysex(CP_COMMAND, [CP_ACCEL_TAP_CONFIG,
-            tap_type_low, tap_type_high, threshold_low, threshold_high])
+        self._command_handler.send_sysex(CP_COMMAND, [
+            CP_ACCEL_TAP_CONFIG, tap_type_low, tap_type_high, threshold_low,
+            threshold_high
+        ])
 
     def sense_color(self, callback=None):
         """Perform a color sense using NeoPixel #1 and the light sensor. Callback

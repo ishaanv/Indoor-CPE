@@ -4,7 +4,6 @@ import sys
 
 from circuitplayground import *
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
@@ -19,11 +18,13 @@ board = CircuitPlayground(port)
 # to change the range from small to large.  ACCEL_2G = +/- 2G
 board.set_accel_range(ACCEL_2G)
 
+
 def accel_data(x, y, z):
     print('Received accelerometer data!')
     print('X = {0}'.format(x))
     print('Y = {0}'.format(y))
     print('Z = {0}'.format(z))
+
 
 # Stream accelerometer data for 2 seconds, pause for 5 seconds, then stream forever.
 print('Printing accelerometer data for 2 seconds...')
