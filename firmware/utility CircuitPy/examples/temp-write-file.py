@@ -1,19 +1,15 @@
-import array
-import audiobusio
+# from analogio import AnalogIn
+# import adafruit_thermistor
+# import array
+# import audiobusio
 import board
-import math
-import neopixel
-import time
-import sys
-import microcontroller
 import digitalio
-
-import adafruit_thermistor
-import board
+# import math
+import microcontroller
+# import neopixel
+# import storage
+# import sys
 import time
-from analogio import AnalogIn
-
-import storage
 
 led = digitalio.DigitalInOut(board.D13)
 led.switch_to_output()

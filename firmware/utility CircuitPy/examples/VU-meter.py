@@ -3,7 +3,7 @@ import audiobusio
 import board
 import math
 import neopixel
-import time
+# import time
 
 # Exponential scaling factor.
 # Should probably be in range -10 .. 10 to be reasonable.
@@ -22,7 +22,8 @@ def constrain(value, floor, ceiling):
     return max(floor, min(value, ceiling))
 
 
-# Scale input_value to be between output_min and output_max, in an exponential way.
+# Scale input_value to be between output_min and
+# output_max, in an exponential way.
 def log_scale(input_value, input_min, input_max, output_min, output_max):
     normalized_input_value = (input_value - input_min) / (
         input_max - input_min)

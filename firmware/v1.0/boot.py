@@ -1,4 +1,4 @@
 # required for storing data
-import storage
+# import storage
 
 # storage.remount("/", False)
