@@ -5,7 +5,7 @@ jobs:
       - image: circleci/python:3.7-node-browsers
     steps:
       - checkout
-      - run: <command>
+      - run: "flake8 . --exclude=*/old/*"
   test:
     docker:
       - image: circleci/python:3.7-node-browsers
