@@ -14,7 +14,7 @@ SOUND constants
 """
 NUM_SAMPLES = 50
 INTERVAL_SOUND = 0.1
-"""
+r"""
 TEMPERATURE constants
 NOMINALRESISTOR the nominal resistance of the
                 standard NTC thermistor at the
