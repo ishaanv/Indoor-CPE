@@ -132,7 +132,9 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
     return last
 
 
-if __name__ == "__main__":
+def do_stuff():
+    last = time.monotonic()
+    light_last = temp_last = sound_last = neopixel_last = last
     while True:
         # get the current time
         now = time.monotonic()
@@ -161,3 +163,6 @@ if __name__ == "__main__":
         # serial prints new value until value is deleted
         neopixel_last = neopixel_control(
             fsize, c.BUFFERNAME, c.INTERVAL_PIXEL, now, neopixel_last)
+
+
+do_stuff()
