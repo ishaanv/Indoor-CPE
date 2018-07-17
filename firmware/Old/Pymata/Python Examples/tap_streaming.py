@@ -5,7 +5,6 @@ import sys
 # Import CircuitPlayground class from the circuitplayground.py in the same directory.
 from circuitplayground import CircuitPlayground
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
@@ -31,6 +30,7 @@ board = CircuitPlayground(port)
 #     - Accel range +/-2G  = 40-80 (80 is the default)
 board.set_tap_config(2, 80)
 
+
 # Callback that will be called when a tap is detected.  The single parameter is
 # a boolean that indicates if it was a single tap, and the double parameter is
 # a boolean that indicates if it was a double tap.  You might see both a single
@@ -40,6 +40,7 @@ def tap_data(single, double):
         print('Single click!')
     if double:
         print('Double click!')
+
 
 # Stream tap data for 2 seconds, then pause for 5 seconds and stream forever.
 print('Streaming tap data for 2 seconds...')

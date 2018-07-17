@@ -12,18 +12,19 @@ logger = logging.getLogger(__name__)
 
 
 def thread_one(start_event):
-    
+
     start_event.wait()
     print("THREAD 1")
     print(d[0])
     print('****')
     d[0] += 1
 
+
 def thread_two(start_event):
     i = 0
     d.append(i)
     while d[0] < 10:
-        
+
         print("THREAD 2")
         print(d[0])
         d[0] += 1

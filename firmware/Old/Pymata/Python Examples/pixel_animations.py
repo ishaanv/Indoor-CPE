@@ -5,18 +5,14 @@ import sys
 
 from circuitplayground import CircuitPlayground
 
-
 # List of color gradients.  Each entry is a 2-tuple of RGB colors.
-COLORS = [ ((255,   0,   0),  (0,   0,   0)),
-           ((0,   255,   0),  (0,   0,   0)),
-           ((0,     0, 255),  (0,   0,   0)),
-           ((255,   0,   0),  (0, 255,   0)),
-           ((255,   0,   0),  (0,   0, 255)),
-           ((0,   255,   0),  (0,   0, 255)) ]
+COLORS = [((255, 0, 0), (0, 0, 0)), ((0, 255, 0), (0, 0, 0)),
+          ((0, 0, 255), (0, 0, 0)), ((255, 0, 0), (0, 255, 0)),
+          ((255, 0, 0), (0, 0, 255)), ((0, 255, 0), (0, 0, 255))]
 
 # List of frequency values for the animation.  Higher values are faster
 # animations (this goes directly into the sine wave computation).
-FREQUENCIES = [ 0.25, 0.5, 1, 2 ]
+FREQUENCIES = [0.25, 0.5, 1, 2]
 
 # Global amimation state, the currently selected color combo (index into colors)
 # and the frequency of the aninmation (index into frequencies).
@@ -26,7 +22,8 @@ current_frequency = 0
 
 # Linear interpolation of a value y within y0...y1 given x and range x0...x1.
 def lerp(x, x0, x1, y0, y1):
-    return y0+(x-x0)*((y1-y0)/(x1-x0))
+    return y0 + (x - x0) * ((y1 - y0) / (x1 - x0))
+
 
 # Define functions that will be called when the buttons change state.
 def left_changed(data):
@@ -34,6 +31,7 @@ def left_changed(data):
     if not data[2]:
         # Move to the next color when button is released.
         current_color = (current_color + 1) % len(COLORS)
+
 
 def right_changed(data):
     global current_frequency
@@ -77,11 +75,11 @@ while True:
     # Go through each pixel and interpolate its color using a sine wave with
     # phase offset based on pixel position.
     for i in range(10):
-        phase = (i/10.0)*2.0*math.pi
-        x = math.sin(2.0*math.pi*frequency*t + phase)
-        red   = int(lerp(x, -1.0, 1.0, c0_red,   c1_red))
+        phase = (i / 10.0) * 2.0 * math.pi
+        x = math.sin(2.0 * math.pi * frequency * t + phase)
+        red = int(lerp(x, -1.0, 1.0, c0_red, c1_red))
         green = int(lerp(x, -1.0, 1.0, c0_green, c1_green))
-        blue  = int(lerp(x, -1.0, 1.0, c0_blue,  c1_blue))
+        blue = int(lerp(x, -1.0, 1.0, c0_blue, c1_blue))
         # Set the pixel color.
         board.set_pixel(i, red, green, blue)
     # Push the updated colors out to the pixels (this will make the pixels change

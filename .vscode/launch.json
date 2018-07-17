@@ -2,6 +2,20 @@
     "version": "0.2.0",
     "configurations": [
       {
+        "name": "Integrated Terminal/Console",
+        "type": "python",
+        "request": "launch",
+        "program": "${file}",
+        "console": "integratedTerminal"
+      },
+    {
+      "name": "Attach (Remote Debug)",
+      "type": "pythonExperimental",
+      "request": "attach",
+      "port": 3000,
+      "host": "localhost"
+    },
+      {
         "name": "Debug Main Process",
         "type": "node",
         "request": "launch",

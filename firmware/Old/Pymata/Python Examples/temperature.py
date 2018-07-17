@@ -6,7 +6,6 @@ import sys
 # Import CircuitPlayground class from the circuitplayground.py in the same directory.
 from circuitplayground import CircuitPlayground
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
@@ -19,6 +18,7 @@ board = CircuitPlayground(port)
 # Initialize reading the thermistor by calling start_temperature once.
 # board.start_temperature()
 
+
 # Optionally you can pass a callback function that will be called when a new
 # temperature measurement is available.  This function should take two
 # parameters, the temp in celsius and the raw ADC value.  See the commented
@@ -26,6 +26,8 @@ board = CircuitPlayground(port)
 def new_temp(temp_c, raw):
     print('Temperature: {0:.2f} Celsius'.format(temp_c))
     print('Raw thermistor ADC value: {0}'.format(raw))
+
+
 board.start_temperature(new_temp)
 
 # Loop forever printing the temperature every second.

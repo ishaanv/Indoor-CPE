@@ -4,7 +4,6 @@ import sys
 
 from circuitplayground import *
 
-
 # Grab the serial port from the command line parameters.
 if len(sys.argv) != 2:
     print('ERROR! Must specify the serial port as command line parameter.')
@@ -13,6 +12,7 @@ port = sys.argv[1]
 
 # Connect to Circuit Playground board on specified port.
 board = CircuitPlayground(port)
+
 
 # Callback that will be called when a cap touch input result is available.
 # The input_pin parameter is the pin number of the input, the touched parameter
@@ -24,6 +24,7 @@ def cap_touch_data(input_pin, touched, raw_value):
     print('Cap touch value for pin {0}: {1}'.format(input_pin, raw_value))
     if touched:
         print('Cap touch pin {0} is pressed!'.format(input_pin))
+
 
 # Stream cap touch data for pin 10 for 2 seconds.
 print('Streaming pin 10 cap touch state for 2 seconds...')
