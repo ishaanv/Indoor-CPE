@@ -1,14 +1,13 @@
 import array
-import audiobusio
-import board
 import math
-import neopixel
+import os
 import time
 
+import audiobusio
+import board
+import neopixel
 from analogio import AnalogIn
 import adafruit_thermistor
-
-import os
 import supervisor
 
 import constants as c
@@ -17,23 +16,25 @@ supervisor.disable_autoreload()
 """ Initialise RGB colour list. """
 colour = [0, 0, 0]
 """ Initialise scheduling variables. """
-last = time.monotonic()
-light_last = last
-temp_last = last
-sound_last = last
-neopixel_last = last
+
+# TODO: does this line need to be here?
+light_last = temp_last = sound_last = neopixel_last = time.monotonic()
 """ Initialise neopixels
     brightness is a value from 0-1
     auto_write = True means the pixels
     value change without show,
     but is extremely slow
 """
-pixels = neopixel.NeoPixel(
-    board.NEOPIXEL, c.NUM_PIXELS, brightness=1, auto_write=False)
+pixels = neopixel.NeoPixel(board.NEOPIXEL,
+                           c.NUM_PIXELS,
+                           brightness=1,
+                           auto_write=False)
 """ Initialise thermistor. """
-thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE, c.RMEASURED,
+thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE,
+                                            c.RMEASURED,
                                             c.NOMINALRESISTOR,
-                                            c.NOMINALTEMPERATURE, c.BETACOEF)
+                                            c.NOMINALTEMPERATURE,
+                                            c.BETACOEF)
 """ Initialise light ADC. """
 light = AnalogIn(board.LIGHT)
 """ Initialise sound measurements. """
@@ -123,8 +124,7 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
 
 
 def do_stuff():
-    last = time.monotonic()
-    light_last = temp_last = sound_last = neopixel_last = last
+    light_last = temp_last = sound_last = neopixel_last = time.monotonic()
     while True:
         # get the current time
         now = time.monotonic()
@@ -132,11 +132,18 @@ def do_stuff():
         # Serial print the value of the sensor value
         # and update last time if scheduled
         # last value is passed through if not scheduled
-        light_last = analog_serial(light.value, c.INTERVAL_LIGHT, now,
+        light_last = analog_serial(light.value,
+                                   c.INTERVAL_LIGHT,
+                                   now,
                                    light_last)
         temp_last = analog_serial(thermistor.temperature,
-                                  c.INTERVAL_TEMPERATURE, now, temp_last)
-        sound_last = sound_serial(mic, samples, c.INTERVAL_SOUND, now,
+                                  c.INTERVAL_TEMPERATURE,
+                                  now,
+                                  temp_last)
+        sound_last = sound_serial(mic,
+                                  samples,
+                                  c.INTERVAL_SOUND,
+                                  now,
                                   sound_last)
 
         # read the byte size of the file from the stat tuple
@@ -144,8 +151,11 @@ def do_stuff():
 
         # update neopixel colour value if BUFFERNAME is not empty
         # serial prints new value until value is deleted
-        neopixel_last = neopixel_control(fsize, c.BUFFERNAME, c.INTERVAL_PIXEL,
-                                         now, neopixel_last)
+        neopixel_last = neopixel_control(fsize,
+                                         c.BUFFERNAME,
+                                         c.INTERVAL_PIXEL,
+                                         now,
+                                         neopixel_last)
 
 
 do_stuff()
