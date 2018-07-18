@@ -149,3 +149,4 @@ def do_stuff():
 
 
 do_stuff()
+# if __name__ is CPYTHON:
