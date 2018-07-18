@@ -8,5 +8,5 @@ ser = serial.Serial(
     stopbits=serial.STOPBITS_ONE,
     bytesize=serial.EIGHTBITS,
     timeout=1)
-
+ser.write(b'\x03')
 ser.write(b'\x04')
