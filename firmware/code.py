@@ -147,4 +147,5 @@ def do_stuff():
         neopixel_last = neopixel_control(fsize, c.BUFFERNAME, c.INTERVAL_PIXEL,
                                          now, neopixel_last)
 
+
 do_stuff()
