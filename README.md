@@ -18,6 +18,8 @@ Copy all contents of `firmware` into the `CIRCUITPY` drive.
 ## Pinout  
 !["CPE Pinout"](docs/CPE_pinout.PNG)
 
+## Corrupt CPX Filesystem
+Jump to [here](https://github.com/bvn-architecture/Indoor-CPE/tree/master/utility/Erase%20File) and follow the instructions.
 
 ___
 # Data Sheets
