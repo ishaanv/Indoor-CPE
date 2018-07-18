@@ -1,3 +1,15 @@
 {
-    "python.formatting.provider": "autopep8"
+    "python.formatting.provider": "autopep8",
+
+    "saveAndRun": {
+        "commands": [
+            {
+                "match": "code\\.py$",
+                "cmd": "cp ${file} E:\\",
+                "useShortcut": false,
+                "silent": false
+            }
+
+        ]
+    }
 }
