@@ -31,7 +31,7 @@ jobs:
           name: run linting and metrics
           command: |
             . venv/bin/activate 
-            pycodestyle "firmware\\v1.0"
+            pycodestyle ".\\firmware\\v1.0"
       - store_artifacts:
           path: test-reports
           destination: test-reports
