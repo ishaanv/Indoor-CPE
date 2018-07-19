@@ -1,56 +1,59 @@
 import array
 import math
 import os
+import sys
 import time
 
-import audiobusio
-import board
-import neopixel
-from analogio import AnalogIn
-import adafruit_thermistor
-import supervisor
+if sys.implementation.name == 'circuitpython':
+    import audiobusio
+    import board
+    import neopixel
+    from analogio import AnalogIn
+    import adafruit_thermistor
+    import supervisor
 
-import constants as c
+    import constants as c
 
-supervisor.disable_autoreload()
-""" Initialise RGB colour list. """
-colour = [0, 0, 0]
-""" Initialise scheduling variables. """
+    supervisor.disable_autoreload()
+    """ Initialise RGB colour list. """
+    colour = [0, 0, 0]
+    """ Initialise scheduling variables. """
 
-# TODO: does this line need to be here?
-light_last = temp_last = sound_last = neopixel_last = time.monotonic()
-""" Initialise neopixels
-    brightness is a value from 0-1
-    auto_write = True means the pixels
-    value change without show,
-    but is extremely slow
-"""
-pixels = neopixel.NeoPixel(board.NEOPIXEL,
-                           c.NUM_PIXELS,
-                           brightness=1,
-                           auto_write=False)
-""" Initialise thermistor. """
-thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE,
-                                            c.RMEASURED,
-                                            c.NOMINALRESISTOR,
-                                            c.NOMINALTEMPERATURE,
-                                            c.BETACOEF)
-""" Initialise light ADC. """
-light = AnalogIn(board.LIGHT)
-""" Initialise sound measurements. """
-mic = audiobusio.PDMIn(
-    board.MICROPHONE_CLOCK,
-    board.MICROPHONE_DATA,
-    sample_rate=44100,
-    bit_depth=16)
-# Record an initial sample to calibrate. Assume it's quiet when we start.
-# TODO: this is dangerous, get rid of it
-samples = array.array('H', [0] * c.NUM_SAMPLES)
-mic.record(samples, len(samples))
+    """ Initialise neopixels
+        brightness is a value from 0-1
+        auto_write = True means the pixels
+        value change without show,
+        but is extremely slow
+    """
+    pixels = neopixel.NeoPixel(board.NEOPIXEL,
+                            c.NUM_PIXELS,
+                            brightness=1,
+                            auto_write=False)
+    """ Initialise thermistor. """
+    thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE,
+                                                c.RMEASURED,
+                                                c.NOMINALRESISTOR,
+                                                c.NOMINALTEMPERATURE,
+                                                c.BETACOEF)
+    """ Initialise light ADC. """
+    light = AnalogIn(board.LIGHT)
+    """ Initialise sound measurements. """
+    mic = audiobusio.PDMIn(
+        board.MICROPHONE_CLOCK,
+        board.MICROPHONE_DATA,
+        sample_rate=44100,
+        bit_depth=16)
+    # Record an initial sample to calibrate. Assume it's quiet when we start.
+    # TODO: this is dangerous, get rid of it
+    samples = array.array('H', [0] * c.NUM_SAMPLES)
+    mic.record(samples, len(samples))
 
 # Set lowest level to expect, plus a little.
 # input_floor = normalized_rms(samples) + 10
 
+
+# TODO: does this line need to be here?
+light_last = temp_last = sound_last = neopixel_last = time.monotonic()
 
 def mean(values):
     """Calculate the geometric mean of two numbers."""
@@ -158,5 +161,5 @@ def do_stuff():
                                          neopixel_last)
 
 
-do_stuff()
-# if __name__ is CPYTHON:
+if sys.implementation.name == 'circuitpython':
+    do_stuff()
