@@ -26,9 +26,9 @@ if sys.implementation.name == 'circuitpython':
         but is extremely slow
     """
     pixels = neopixel.NeoPixel(board.NEOPIXEL,
-                            c.NUM_PIXELS,
-                            brightness=1,
-                            auto_write=False)
+                               c.NUM_PIXELS,
+                               brightness=1,
+                               auto_write=False)
     """ Initialise thermistor. """
     thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE,
                                                 c.RMEASURED,
@@ -54,6 +54,7 @@ if sys.implementation.name == 'circuitpython':
 
 # TODO: does this line need to be here?
 light_last = temp_last = sound_last = neopixel_last = time.monotonic()
+
 
 def mean(values):
     """Calculate the geometric mean of two numbers."""
