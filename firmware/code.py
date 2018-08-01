@@ -55,6 +55,7 @@ if sys.implementation.name == 'circuitpython':
 # TODO: does this line need to be here?
 light_last = temp_last = sound_last = neopixel_last = time.monotonic()
 
+
 def mean(values):
     """Calculate the geometric mean of two numbers."""
     return sum(values) / len(values)
