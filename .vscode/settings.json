@@ -4,8 +4,8 @@
     "saveAndRun": {
         "commands": [
             {
-                "match": "code\\.py$",
-                "cmd": "cp ${file} E:\\",
+                "match": "code_dev\\.py$",
+                "cmd": "cp ${file} E:\\code.py",
                 "useShortcut": false,
                 "silent": false
             }

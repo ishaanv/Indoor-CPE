@@ -26,9 +26,9 @@ if sys.implementation.name == 'circuitpython':
         but is extremely slow
     """
     pixels = neopixel.NeoPixel(board.NEOPIXEL,
-                            c.NUM_PIXELS,
-                            brightness=1,
-                            auto_write=False)
+                               c.NUM_PIXELS,
+                               brightness=1,
+                               auto_write=False)
     """ Initialise thermistor. """
     thermistor = adafruit_thermistor.Thermistor(board.TEMPERATURE,
                                                 c.RMEASURED,

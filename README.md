@@ -1,4 +1,5 @@
-# Indoor-CPE
+# Indoor-CPE [![CircleCI](https://circleci.com/gh/bvn-architecture/Indoor-CPE/tree/master.svg?style=svg)](https://circleci.com/gh/bvn-architecture/Indoor-CPE/tree/master)
+
 Repository for all firmware related to the Circuit Playground Express for indoor sensing and control at BVN.
 
 ## Instructions to load firmware

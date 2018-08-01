@@ -1,5 +1,5 @@
-# from code import mean
-import code
+from code_dev import mean
+
 
 def test_mean():
     assert code.mean([1, 3]) == 2
