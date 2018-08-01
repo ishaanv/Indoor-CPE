@@ -139,12 +139,12 @@ def do_stuff():
         light_last = analog_serial(light.value,
                                    c.INTERVAL_LIGHT,
                                    now,
-                                   light_last, 
+                                   light_last,
                                    "light")
         temp_last = analog_serial(thermistor.temperature,
                                   c.INTERVAL_TEMPERATURE,
                                   now,
-                                  temp_last, 
+                                  temp_last,
                                   "temperature")
         sound_last = sound_serial(mic,
                                   samples,
