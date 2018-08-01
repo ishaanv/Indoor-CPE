@@ -88,7 +88,7 @@ def serial(text):
 def analog_serial(value, sample_rate, now, last, sensor):
     """    """
     if now - last > sample_rate:
-        serial(sensor+": "+value)
+        serial(sensor + ": " + str(value))
         last = now
 
     return last
