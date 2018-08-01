@@ -116,14 +116,14 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
                     colour[0] = int(lines[0][:2], 16)
                     colour[1] = int(lines[0][2:4], 16)
                     colour[2] = int(lines[0][4:], 16)
-
+                    serial("received")
             for i in range(c.NUM_PIXELS):
                 pixels[i] = colour
                 pixels.show()
 
             # send current pixel colour until windows destructive reads
-            N = pixels.__getitem__(0)
-            serial("N{}{}{}".format(N[0], N[1], N[2]))
+            # N = pixels.__getitem__(0)
+            # serial("N{}{}{}".format(N[0], N[1], N[2]))
     return last
 
 
