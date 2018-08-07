@@ -36,3 +36,5 @@ sudo apt-get install -y libgconf-2-4
 node_modules/.bin/electron-rebuild -f -w serialport
 node_modules/.bin/electron-rebuild -f -w usb
 
+# run electorn as node
+export ELECTRON_RUN_AS_NODE=true
