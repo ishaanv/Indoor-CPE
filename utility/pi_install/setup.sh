@@ -28,8 +28,9 @@ git clone https://github.com/bvn-architecture/BVN_desktop_electron
 # install dependency for node-gyp
 sudo apt-get install libudev-dev
 
-#install chromium
-sudo apt-get install chromium-browser
+#install dependencies for linux/pi electron: chromium
+sudo apt-get install -y chromium-browser
+sudo apt-get install -y libgconf-2-4
 
 # rebuild serialport and usb
 node_modules/.bin/electron-rebuild -f -w serialport
