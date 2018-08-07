@@ -19,3 +19,12 @@ nvm use 8
 
 # update NPM
 npm install npm@latest -g
+
+# clone repos
+cd ~
+# git clone https://github.com/bvn-architecture/Indoor-CPE
+git clone https://github.com/bvn-architecture/BVN_desktop_electron
+
+# rebuild serialport and usb
+node_modules/.bin/electron-rebuild -f -w serialport
+node_modules/.bin/electron-rebuild -f -w usb
