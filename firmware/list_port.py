@@ -7,9 +7,9 @@ for p in ports:
         either "Adafruit Circuit Playground Express" (windows)
         OR
         "CircuitPlayground Express" (rpi)
-        
+
         see: https://pythonhosted.org/pyserial/tools.html#serial.tools.list_ports.ListPortInfo
-        for documentation 
+        for documentation on comports objects
         """
         CPE = p
         CPE_ID = [p.vid, p.pid]
