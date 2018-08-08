@@ -85,10 +85,10 @@ def serial(text):
     print(text)
 
 
-def analog_serial(value, sample_rate, now, last):
+def analog_serial(value, sample_rate, now, last, sensor):
     """    """
     if now - last > sample_rate:
-        serial(value)
+        serial(sensor + ": " + str(value))
         last = now
 
     return last
@@ -116,14 +116,14 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
                     colour[0] = int(lines[0][:2], 16)
                     colour[1] = int(lines[0][2:4], 16)
                     colour[2] = int(lines[0][4:], 16)
-
+                    serial("received")
             for i in range(c.NUM_PIXELS):
                 pixels[i] = colour
                 pixels.show()
 
             # send current pixel colour until windows destructive reads
-            N = pixels.__getitem__(0)
-            serial("N{}{}{}".format(N[0], N[1], N[2]))
+            # N = pixels.__getitem__(0)
+            # serial("N{}{}{}".format(N[0], N[1], N[2]))
     return last
 
 
@@ -139,11 +139,13 @@ def do_stuff():
         light_last = analog_serial(light.value,
                                    c.INTERVAL_LIGHT,
                                    now,
-                                   light_last)
+                                   light_last,
+                                   "light")
         temp_last = analog_serial(thermistor.temperature,
                                   c.INTERVAL_TEMPERATURE,
                                   now,
-                                  temp_last)
+                                  temp_last,
+                                  "temperature")
         sound_last = sound_serial(mic,
                                   samples,
                                   c.INTERVAL_SOUND,
