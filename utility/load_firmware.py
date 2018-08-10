@@ -10,6 +10,7 @@ for drive_letter in drive_letters:
     print(drive_letter)
     drive_name = win32api.GetVolumeInformation(drive_letter)[0]
     if drive_name == "CPLAYBOOT":
+        print("loading bootloader to: " + drive_letter)
         copy(bootloader, drive_letter[:2])
         print(drive_name)
 
@@ -26,6 +27,7 @@ drive_letters = drive_letters.split('\000')[:-1]
 for drive_letter in drive_letters:
     drive_name = win32api.GetVolumeInformation(drive_letter)[0]
     if drive_name == "CIRCUITPY":
+        print("loading firmware to: " + drive_name)
         copy(code_dev, drive_letter[:2]+'\\code.py')
         copy(constants, drive_letter[:2]+'\\constants.py')
         copy(boot, drive_letter[:2]+'\\boot.py')
