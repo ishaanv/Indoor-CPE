@@ -13,7 +13,9 @@ SOUND constants
 
 """
 NUM_SAMPLES = 50
-INTERVAL_SOUND = 0.1
+INTERVAL_SOUND = 0.5
+SAMPLE_RATE = 16000
+BIT_DEPTH = 16
 r"""
 TEMPERATURE constants
 NOMINALRESISTOR the nominal resistance of the
@@ -42,19 +44,19 @@ NOMINALTEMPERATURE = 25  # Room temperature standard NTC value in °C
 RMEASURED = 11371.93
 BETACOEF = 3950
 
-INTERVAL_TEMPERATURE = 1
+INTERVAL_TEMPERATURE = 5
 """
 NEOPIXEL constants
 NUM_PIXELS is the number of neopixels on board
 
 """
 NUM_PIXELS = 10
-INTERVAL_PIXEL = 0.1
+INTERVAL_PIXEL = 1
 """
 TEMPERATURE constants
 
 """
-INTERVAL_LIGHT = 0.2
+INTERVAL_LIGHT = 2
 """
 FILE values
 
