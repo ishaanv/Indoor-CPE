@@ -8,8 +8,13 @@
                 "cmd": "cp ${file} E:\\code.py",
                 "useShortcut": false,
                 "silent": false
+            },
+            {
+                "match": "code_dev\\.py$",
+                "cmd": "cp c:\\Users\\aiden\\Documents\\BVN\\GitHub\\Indoor-CPE\\firmware\\constants.py E:\\constants.py",
+                "useShortcut": false,
+                "silent": false
             }
-
         ]
     }
 }
