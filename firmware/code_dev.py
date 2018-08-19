@@ -41,15 +41,15 @@ if sys.implementation.name == 'circuitpython':
     mic = audiobusio.PDMIn(
         board.MICROPHONE_CLOCK,
         board.MICROPHONE_DATA,
-        sample_rate=44100,
-        bit_depth=16)
+        sample_rate=c.SAMPLE_RATE,
+        bit_depth=c.BIT_DEPTH)
     # Record an initial sample to calibrate. Assume it's quiet when we start.
     # TODO: this is dangerous, get rid of it
     samples = array.array('H', [0] * c.NUM_SAMPLES)
     mic.record(samples, len(samples))
 
 # Set lowest level to expect, plus a little.
-# input_floor = normalized_rms(samples) + 10
+# input_floor = normalised_rms(samples) + 10
 
 
 # TODO: does this line need to be here?
@@ -61,7 +61,7 @@ def mean(values):
     return sum(values) / len(values)
 
 
-def normalized_rms(values):
+def normalised_rms(values):
     """
 
     TODO: check whether len(values) includes zeroes
@@ -98,7 +98,7 @@ def sound_serial(mic, samples, sample_rate, now, last):
     """    """
     if now - last > sample_rate:
         mic.record(samples, len(samples))
-        magnitude = normalized_rms(samples)
+        magnitude = normalised_rms(samples)
         serial("sound: {}".format(magnitude))
         last = now
     return last
@@ -127,7 +127,7 @@ def neopixel_control(fsize, buffer_name, sample_rate, now, last):
     return last
 
 
-def do_stuff():
+def main():
     light_last = temp_last = sound_last = neopixel_last = time.monotonic()
     while True:
         # get the current time
@@ -165,4 +165,4 @@ def do_stuff():
 
 
 if sys.implementation.name == 'circuitpython':
-    do_stuff()
+    main()
