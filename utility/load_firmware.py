@@ -1,3 +1,9 @@
+"""
+Windows utility function to load bootloader and firmware 
+for multiple connected CPEs 
+i.e. connceted via a HUB
+TODO: currently only loading of the bootloader works
+"""
 import win32api
 from shutil import copy
 import time
