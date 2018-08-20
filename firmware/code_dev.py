@@ -12,7 +12,7 @@ if sys.implementation.name == 'circuitpython':
     import adafruit_thermistor
     import supervisor
 
-    import constants as c
+    import config as c
 
     supervisor.disable_autoreload()
     """ Initialise RGB colour list. """
