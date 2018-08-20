@@ -4,6 +4,9 @@ import os
 import sys
 import time
 
+import config as c
+
+""" Check Python implementation for testing purposes. """
 if sys.implementation.name == 'circuitpython':
     import audiobusio
     import board
@@ -11,8 +14,6 @@ if sys.implementation.name == 'circuitpython':
     from analogio import AnalogIn
     import adafruit_thermistor
     import supervisor
-
-    import config as c
 
     supervisor.disable_autoreload()
     """ Initialise RGB colour list. """
