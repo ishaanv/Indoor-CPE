@@ -66,7 +66,7 @@ def normalised_rms(values):
     """
 
     TODO: check whether len(values) includes zeroes
-    i.e. empy buffer (samples) values are zero?
+    i.e. empty buffer (samples) values are zero?
     """
     # Remove DC bias before computing RMS.
     dc_bias = int(mean(values))
