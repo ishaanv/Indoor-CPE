@@ -60,6 +60,10 @@ INTERVAL_LIGHT = 2
 """
 FILE values
 
-BUFFERNAME is the
+BUFFERNAME is the name of file buffer
+
+FILE_BYTE_SIZE is the index for the stat tuple
+which corresponds to the byte size of the file
 """
 BUFFERNAME = 'buffer.txt'
+FILE_BYTE_SIZE = 6

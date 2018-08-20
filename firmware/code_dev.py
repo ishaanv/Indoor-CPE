@@ -154,7 +154,7 @@ def main():
                                   sound_last)
 
         # read the byte size of the file from the stat tuple
-        fsize = os.stat(c.BUFFERNAME)[6]
+        fsize = os.stat(c.BUFFERNAME)[c.FILE_BYTE_SIZE]
 
         # update neopixel colour value if BUFFERNAME is not empty
         # serial prints new value until value is deleted
