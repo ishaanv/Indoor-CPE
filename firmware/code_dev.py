@@ -46,6 +46,7 @@ if sys.implementation.name == 'circuitpython':
         bit_depth=c.BIT_DEPTH)
     # Record an initial sample to calibrate. Assume it's quiet when we start.
     # TODO: this is dangerous, get rid of it
+    # an array of unsigned shorts ('H')
     samples = array.array('H', [0] * c.NUM_SAMPLES)
     mic.record(samples, len(samples))
 
@@ -64,6 +65,8 @@ def mean(values):
 
 def normalised_rms(values):
     """
+    calculate normalised rms value of sound recording
+    of NUM_SAMPLES
 
     TODO: check whether len(values) includes zeroes
     i.e. empty buffer (samples) values are zero?
@@ -86,8 +89,11 @@ def serial(text):
     print(text)
 
 
-def analog_serial(value, sample_rate, now, last, sensor):
-    """    """
+def basic_serial(value, sample_rate, now, last, sensor):
+    """
+    check basic scheduler for timing of sensor
+    if scheduled, print to serial port
+    """
     if now - last > sample_rate:
         serial(sensor + ": " + str(value))
         last = now
@@ -96,7 +102,14 @@ def analog_serial(value, sample_rate, now, last, sensor):
 
 
 def sound_serial(mic, samples, sample_rate, now, last):
-    """    """
+    """
+    check basic scheduler for timing of sensor
+    if scheduled:
+        1. record sound data
+            (blocking for NUM_SAMPLES*SAMPLE_RATE seconds)
+        2. calculate magintude
+        3. print to serial port
+    """
     if now - last > sample_rate:
         mic.record(samples, len(samples))
         magnitude = normalised_rms(samples)
@@ -106,7 +119,15 @@ def sound_serial(mic, samples, sample_rate, now, last):
 
 
 def neopixel_control(fsize, buffer_name, sample_rate, now, last):
-    """    """
+    """
+    check basic scheduler for timing of sensor
+    if scheduled:
+        1. poll file size, if non-zero do nothing
+            otherwise read file assuming first line
+            is an RGB hex colour value
+        2. change neopixels to colour
+        3. send colour of neopixels to host until file emptied
+    """
     if now - last > sample_rate:
         last = now
         if fsize > 0:
@@ -137,16 +158,16 @@ def main():
         # Serial print the value of the sensor value
         # and update last time if scheduled
         # last value is passed through if not scheduled
-        light_last = analog_serial(light.value,
-                                   c.INTERVAL_LIGHT,
-                                   now,
-                                   light_last,
-                                   "light")
-        temp_last = analog_serial(thermistor.temperature,
-                                  c.INTERVAL_TEMPERATURE,
+        light_last = basic_serial(light.value,
+                                  c.INTERVAL_LIGHT,
                                   now,
-                                  temp_last,
-                                  "temperature")
+                                  light_last,
+                                  "light")
+        temp_last = basic_serial(thermistor.temperature,
+                                 c.INTERVAL_TEMPERATURE,
+                                 now,
+                                 temp_last,
+                                 "temperature")
         sound_last = sound_serial(mic,
                                   samples,
                                   c.INTERVAL_SOUND,
